@@ -1,0 +1,617 @@
+
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#155eef">
+  <title>NMH - Digital Store | Admin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Myanmar:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #155eef;
+      --primary-dark: #1249c7;
+      --bg: #f5f7fb;
+      --text: #172b4d;
+      --muted: #718096;
+      --border: #e8edf5;
+      --white: #ffffff;
+      --shadow: 0 8px 30px rgba(16, 40, 90, .06);
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', 'Noto Sans Myanmar', sans-serif;
+    }
+
+    button, input, textarea, select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .admin-header {
+      min-height: 76px;
+      padding: 14px 5%;
+      background: linear-gradient(110deg, #155eef, #3478f6);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      box-shadow: 0 5px 20px rgba(21, 94, 239, .18);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 43px;
+      height: 43px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 13px;
+      font-size: 21px;
+      font-weight: 800;
+    }
+
+    .brand h2 {
+      margin: 0;
+      font-size: 19px;
+      font-weight: 800;
+    }
+
+    .brand small {
+      display: block;
+      margin-top: 3px;
+      opacity: .8;
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+
+    #logoutBtn {
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.3);
+      color: white;
+      padding: 10px 17px;
+      border-radius: 9px;
+      font-weight: 700;
+      transition: .2s;
+    }
+
+    #logoutBtn:hover {
+      background: white;
+      color: var(--primary);
+    }
+
+    .admin-container {
+      max-width: 1180px;
+      margin: 38px auto;
+      padding: 0 22px 50px;
+    }
+
+    .page-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .page-heading h1 {
+      margin: 0;
+      font-size: 29px;
+      font-weight: 800;
+      letter-spacing: -.7px;
+    }
+
+    .welcome-text {
+      color: var(--muted);
+      margin: 8px 0 0;
+      font-size: 14px;
+    }
+
+    .admin-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .admin-card {
+      position: relative;
+      overflow: hidden;
+      padding: 23px;
+      min-height: 145px;
+      border-radius: 17px;
+      background: linear-gradient(125deg, #155eef, #4387ff);
+      color: white;
+      box-shadow: 0 10px 25px rgba(21,94,239,.17);
+    }
+
+    .admin-card::after {
+      content: "";
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      right: -35px;
+      top: -45px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.12);
+    }
+
+    .admin-card h3 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 600;
+      opacity: .9;
+    }
+
+    .admin-card p {
+      margin: 15px 0 0;
+      font-size: 37px;
+      font-weight: 800;
+    }
+
+    .stat-icon {
+      position: absolute;
+      right: 22px;
+      bottom: 22px;
+      font-size: 34px;
+      opacity: .85;
+    }
+
+    .admin-products {
+      background: white;
+      padding: 25px;
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      box-shadow: var(--shadow);
+    }
+
+    .admin-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 23px;
+    }
+
+    .admin-title h2 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .admin-title p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    #addProductBtn,
+    #saveProductBtn {
+      border: none;
+      background: var(--primary);
+      color: white;
+      padding: 12px 18px;
+      border-radius: 9px;
+      font-weight: 700;
+      transition: .2s;
+      box-shadow: 0 5px 13px rgba(21,94,239,.15);
+    }
+
+    #addProductBtn:hover,
+    #saveProductBtn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    #productForm {
+      background: #f8faff;
+      border: 1px solid #e2eaf8;
+      padding: 23px;
+      border-radius: 14px;
+      margin-bottom: 26px;
+    }
+
+    #productForm h3 {
+      margin: 0 0 20px;
+      font-size: 18px;
+    }
+
+    #saveProductForm {
+      display: grid;
+      gap: 14px;
+    }
+
+    #saveProductForm input:not([type="checkbox"]):not([type="file"]),
+    #saveProductForm textarea,
+    #saveProductForm select {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid #dce4f0;
+      border-radius: 9px;
+      font-size: 14px;
+      outline: none;
+      background: white;
+      transition: .2s;
+    }
+
+    #saveProductForm input:focus,
+    #saveProductForm textarea:focus,
+    #saveProductForm select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(21,94,239,.09);
+    }
+
+    #saveProductForm textarea {
+      min-height: 95px;
+      resize: vertical;
+    }
+
+    #productImageFile {
+      width: 100%;
+      padding: 12px;
+      background: white;
+      border: 1px dashed #aabbd6;
+      border-radius: 9px;
+      font-size: 13px;
+    }
+
+    .image-help {
+      color: var(--muted);
+      font-size: 12px;
+      margin: -5px 0 0;
+      line-height: 1.7;
+    }
+
+    .image-preview-box {
+      display: none;
+      margin-top: 5px;
+    }
+
+    #imagePreview {
+      display: block;
+      max-width: 190px;
+      max-height: 190px;
+      object-fit: contain;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: white;
+      padding: 6px;
+    }
+
+    #saveProductForm label {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    #productActive {
+      accent-color: var(--primary);
+      width: 16px;
+      height: 16px;
+      vertical-align: middle;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    #cancelProductBtn {
+      background: #e9eef6;
+      color: #475569;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 9px;
+      font-weight: 700;
+    }
+
+    #cancelProductBtn:hover {
+      background: #dce4f0;
+    }
+
+    #formMessage {
+      margin: 0;
+      font-size: 13px;
+    }
+
+    #adminProductList {
+      display: grid;
+      gap: 12px;
+    }
+
+    .admin-product-row {
+      display: grid;
+      grid-template-columns: 1fr auto auto auto;
+      align-items: center;
+      gap: 15px;
+      padding: 17px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: white;
+      transition: .2s;
+    }
+
+    .admin-product-row:hover {
+      border-color: #c7d8fa;
+      box-shadow: 0 5px 17px rgba(16,40,90,.05);
+    }
+
+    .admin-product-row h3 {
+      margin: 0;
+      font-size: 15px;
+    }
+
+    .admin-product-row p {
+      color: var(--muted);
+      margin: 6px 0;
+      font-size: 13px;
+    }
+
+    .product-actions {
+      display: flex;
+      gap: 7px;
+    }
+
+    .edit-btn,
+    .delete-btn {
+      border: none;
+      padding: 9px 12px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 700;
+      transition: .2s;
+    }
+
+    .edit-btn {
+      background: #e9f1ff;
+      color: #155eef;
+    }
+
+    .edit-btn:hover {
+      background: #d7e6ff;
+    }
+
+    .delete-btn {
+      background: #fff0f0;
+      color: #dc2626;
+    }
+
+    .delete-btn:hover {
+      background: #ffe0e0;
+    }
+
+    .active-status {
+      color: #15945b;
+      font-weight: 700;
+      font-size: 12px;
+      background: #e8f8ef;
+      padding: 6px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .inactive-status {
+      color: #dc2626;
+      font-weight: 700;
+      font-size: 12px;
+      background: #fff0f0;
+      padding: 6px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 700px) {
+      .admin-header {
+        padding: 13px 16px;
+      }
+
+      .brand h2 {
+        font-size: 15px;
+      }
+
+      .admin-container {
+        margin: 25px auto;
+        padding: 0 13px 35px;
+      }
+
+      .page-heading h1 {
+        font-size: 24px;
+      }
+
+      .admin-products {
+        padding: 17px;
+      }
+
+      .admin-title {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      #addProductBtn {
+        width: 100%;
+      }
+
+      .admin-product-row {
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+      }
+
+      .product-actions {
+        grid-column: 1 / -1;
+      }
+
+      .admin-product-row .active-status,
+      .admin-product-row .inactive-status {
+        justify-self: end;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .admin-card p {
+        font-size: 32px;
+      }
+
+      #productForm {
+        padding: 15px;
+      }
+
+      .form-actions button {
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="admin-header">
+    <div class="brand">
+      <div class="brand-icon">N</div>
+      <div>
+        <h2>NMH - Digital Store</h2>
+        <small>ADMIN DASHBOARD</small>
+      </div>
+    </div>
+
+    <button id="logoutBtn">Logout ↗</button>
+  </header>
+
+  <main class="admin-container">
+
+    <div class="page-heading">
+      <div>
+        <h1>Dashboard</h1>
+        <p class="welcome-text">Welcome back! Manage your digital products.</p>
+      </div>
+    </div>
+
+    <section class="admin-stats">
+      <div class="admin-card">
+        <h3>Total Products</h3>
+        <p id="productCount">0</p>
+        <span class="stat-icon">📦</span>
+      </div>
+    </section>
+
+    <section class="admin-products">
+
+      <div class="admin-title">
+        <div>
+          <h2>Product Management</h2>
+          <p>Add, edit and manage your store products.</p>
+        </div>
+
+        <button id="addProductBtn">＋ Add Product</button>
+      </div>
+
+      <div id="productForm" style="display:none;">
+
+        <h3 id="formTitle">Add New Product</h3>
+
+        <form id="saveProductForm">
+
+          <input type="hidden" id="editProductId">
+
+          <input
+            type="text"
+            id="productName"
+            placeholder="Product Name"
+            required
+          >
+
+          <textarea
+            id="productDescription"
+            placeholder="Product Description"
+          ></textarea>
+
+          <input
+            type="number"
+            id="productPrice"
+            placeholder="Product Price (MMK)"
+            min="0"
+            step="1"
+            required
+          >
+
+          <select id="productType">
+            <option value="game">Game</option>
+            <option value="digital">Digital Service</option>
+          </select>
+
+          <label for="productImageFile">Product Image Upload</label>
+
+          <input
+            type="file"
+            id="productImageFile"
+            accept="image/png,image/jpeg,image/webp"
+          >
+
+          <p class="image-help">
+            JPG, PNG, WEBP ပုံများသာ လက်ခံပါသည်။ အများဆုံး 5MB။
+            ပုံအသစ်မရွေးပါက ရှိပြီးသားပုံကို ဆက်သုံးပါမည်။
+          </p>
+
+          <div class="image-preview-box" id="imagePreviewBox">
+            <img id="imagePreview" src="" alt="Product image preview">
+          </div>
+
+          <input
+            type="url"
+            id="productImage"
+            placeholder="သို့မဟုတ် Product Image URL ထည့်ပါ"
+          >
+
+          <label>
+            <input type="checkbox" id="productActive" checked>
+            Active
+          </label>
+
+          <div class="form-actions">
+            <button type="submit" id="saveProductBtn">
+              Save Product
+            </button>
+
+            <button type="button" id="cancelProductBtn">
+              Cancel
+            </button>
+          </div>
+
+          <p id="formMessage" role="status"></p>
+
+        </form>
+      </div>
+
+      <div id="adminProductList">
+        Loading products...
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="dashboard.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="my">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1769e8">
+  <meta name="description" content="NMH - Digital Store. Game Top-up and Digital Services.">
+  <title>NMH - Digital Store</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <a class="brand" href="#">
+      <span class="brand-mark">▶</span>
+      <span>NMH - Digital Store</span>
+    </a>
+
+    <nav class="nav">
+      <a class="active" href="#home">Home</a>
+      <a href="#products">Shop</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <button class="cart-button" id="cartButton" aria-label="Cart">
+      🛒 <span id="cartCount">0</span>
+    </button>
+
+    <button class="menu-button" id="menuButton" aria-label="Open menu">☰</button>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div>
+        <p class="eyebrow">FAST • EASY • SECURE</p>
+        <h1>Digital Store<br><span>Made Simple.</span></h1>
+        <p class="hero-copy">
+          သင်လိုချင်တဲ့ Game Top-up နဲ့ Digital Service တွေကို
+          တစ်နေရာတည်းမှာ ဝယ်ယူလိုက်ပါ။
+        </p>
+        <a class="primary-button" href="#products">
+          ပစ္စည်းများ ကြည့်ရန် <span>→</span>
+        </a>
+      </div>
+
+      <div class="hero-art" aria-hidden="true">
+        <div class="orbit orbit-one"></div>
+        <div class="orbit orbit-two"></div>
+        <div class="controller">🎮</div>
+        <div class="spark spark-one">✦</div>
+        <div class="spark spark-two">✧</div>
+      </div>
+    </section>
+
+    <section class="section" id="products">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">OUR STORE</p>
+          <h2>ပစ္စည်းများ</h2>
+        </div>
+        <span class="item-total" id="itemTotal">ပစ္စည်းများ</span>
+      </div>
+
+      <div class="filters" id="filters">
+        <button class="filter active" data-filter="all">အားလုံး</button>
+        <button class="filter" data-filter="game">Game Top-up</button>
+        <button class="filter" data-filter="digital">Digital Service</button>
+      </div>
+
+      <div class="product-list" id="productList"></div>
+    </section>
+
+    <section class="contact" id="contact">
+      <div>
+        <p class="eyebrow">NEED HELP?</p>
+        <h2>အကူအညီလိုပါသလား။</h2>
+        <p>ဝယ်ယူလိုပါက Telegram မှတစ်ဆင့် ဆက်သွယ်နိုင်ပါတယ်။</p>
+      </div>
+
+      <a class="telegram-button"
+         href="https://t.me/nay676767"
+         target="_blank"
+         rel="noopener">
+        ✈ Telegram ဆက်သွယ်ရန်
+      </a>
+    </section>
+  </main>
+
+  <footer>
+    <a class="brand footer-brand" href="#">
+      <span class="brand-mark">▶</span>
+      <span>NMH - Digital Store</span>
+    </a>
+    <span>© 2026 NMH - Digital Store. All rights reserved.</span>
+  </footer>
+
+  <!-- ORDER MODAL -->
+  <div class="modal-overlay" id="orderModal" aria-hidden="true">
+    <div class="order-modal"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="orderTitle">
+
+      <button class="modal-close"
+              id="closeOrderModal"
+              type="button"
+              aria-label="Close">×</button>
+
+      <p class="eyebrow">NMH - DIGITAL STORE ORDER</p>
+      <h2 id="orderTitle">Order တင်ရန်</h2>
+      <p class="modal-description">
+        အောက်ပါအချက်အလက်များကို ဖြည့်သွင်းပေးပါ။
+      </p>
+
+      <div class="selected-product">
+        <div>
+          <span class="selected-label">ရွေးချယ်ထားသောပစ္စည်း</span>
+          <strong id="selectedProductName">Product</strong>
+        </div>
+        <strong id="selectedProductPrice">Ks0</strong>
+      </div>
+
+      <form id="orderForm">
+        <label for="customerName">အမည်</label>
+        <input
+          id="customerName"
+          name="customer_name"
+          type="text"
+          placeholder="သင့်အမည်"
+          maxlength="100"
+          required
+        >
+
+        <label for="customerPhone">ဖုန်းနံပါတ်</label>
+        <input
+          id="customerPhone"
+          name="customer_phone"
+          type="tel"
+          placeholder="ဖုန်းနံပါတ်"
+          maxlength="40"
+          required
+        >
+
+        <label for="playerId">Player ID / Account ID</label>
+        <input
+          id="playerId"
+          name="player_id"
+          type="text"
+          placeholder="Game ID သို့မဟုတ် Account ID"
+          maxlength="100"
+          required
+        >
+
+        <p class="form-note">
+          Order တင်ပြီးပါက ဆိုင်ဘက်မှ အချက်အလက်များကို စစ်ဆေးပေးပါမည်။
+        </p>
+
+        <button class="submit-order" id="submitOrder" type="submit">
+          Order တင်မည်
+        </button>
+
+        <button class="cancel-order" id="cancelOrder" type="button">
+          ပြန်သွားမည်
+        </button>
+
+        <p class="order-message" id="orderMessage" role="status"></p>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js"></script>
+
+</body>
+</html>
