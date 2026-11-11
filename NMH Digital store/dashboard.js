@@ -1,4 +1,3 @@
-
 /* =========================================
    K7 DIGITAL STORE - ADMIN DASHBOARD
    Supabase + Category Manager + Product CRUD
@@ -128,15 +127,18 @@ function createCategoryUI() {
   categoryManager.id = "categoryManager";
 
   categoryManager.style.cssText = `
-    background:#fff;
-    padding:20px;
-    margin:20px 0;
-    border-radius:14px;
-    border:1px solid #e5e7eb;
+    background:linear-gradient(135deg,#1769e8 0%,#0b55c5 55%,#073b91 100%);
+    color:#ffffff;
+    padding:24px;
+    margin:22px 0;
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,.22);
+    box-shadow:0 12px 30px rgba(23,105,232,.25);
+    box-sizing:border-box;
   `;
 
   categoryManager.innerHTML = `
-    <h3 style="margin:0 0 15px;color:#1769e8;">
+    <h3 style="margin:0 0 18px;color:#fff;font-size:22px;font-weight:900;letter-spacing:.2px;">
       Category Management
     </h3>
 
@@ -145,21 +147,21 @@ function createCategoryUI() {
         type="text"
         id="newCategoryName"
         placeholder="Category အမည်ထည့်ပါ"
-        style="flex:1;min-width:180px;padding:12px;border:1px solid #ddd;border-radius:8px;"
+        style="flex:1;min-width:200px;padding:14px 15px;background:#fff;color:#172b4d;border:2px solid rgba(255,255,255,.55);border-radius:11px;font-size:15px;font-weight:600;outline:none;box-sizing:border-box;"
       >
 
       <button
         type="button"
         id="addCategoryBtn"
-        style="padding:12px 20px;background:#1769e8;color:white;border:0;border-radius:8px;cursor:pointer;"
+        style="padding:14px 20px;background:#fff;color:#1458c7;border:0;border-radius:11px;cursor:pointer;font-size:15px;font-weight:900;box-shadow:0 4px 12px rgba(0,0,0,.12);"
       >
-        Category ထည့်မယ်
+        + Category ထည့်မယ်
       </button>
     </div>
 
-    <p id="categoryMessage" style="font-size:13px;margin:12px 0;"></p>
+    <p id="categoryMessage" style="font-size:14px;margin:14px 0 8px;color:#fff;font-weight:800;min-height:20px;"></p>
 
-    <div id="categoryList" style="display:grid;gap:10px;"></div>
+    <div id="categoryList" style="display:grid;gap:11px;"></div>
   `;
 
   adminTitle.insertAdjacentElement("afterend", categoryManager);
@@ -212,7 +214,9 @@ function renderCategories() {
 
   if (!categories.length) {
     list.innerHTML = `
-      <p style="color:#888;">Category မရှိသေးပါ။</p>
+      <p style="color:#fff;font-size:15px;font-weight:700;margin:5px 0;">
+        Category မရှိသေးပါ။
+      </p>
     `;
     return;
   }
@@ -222,14 +226,26 @@ function renderCategories() {
       style="
         display:flex;
         align-items:center;
-        gap:8px;
+        gap:9px;
         flex-wrap:wrap;
-        padding:12px;
-        border:1px solid #e5e7eb;
-        border-radius:9px;
+        padding:15px;
+        background:rgba(5,35,95,.42);
+        border:1px solid rgba(255,255,255,.28);
+        border-radius:12px;
+        box-shadow:0 5px 14px rgba(0,0,0,.10);
+        box-sizing:border-box;
       "
     >
-      <strong style="flex:1;min-width:100px;">
+      <strong style="
+        flex:1;
+        min-width:130px;
+        color:#fff;
+        font-size:18px;
+        line-height:1.4;
+        font-weight:900;
+        letter-spacing:.2px;
+        overflow-wrap:anywhere;
+      ">
         ${escapeHTML(category.name)}
       </strong>
 
@@ -238,6 +254,7 @@ function renderCategories() {
         data-action="up"
         data-id="${category.id}"
         ${index === 0 ? "disabled" : ""}
+        style="min-width:42px;padding:10px 12px;background:rgba(255,255,255,.17);color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:9px;font-size:14px;font-weight:900;cursor:pointer;opacity:${index === 0 ? ".45" : "1"};"
       >▲</button>
 
       <button
@@ -245,19 +262,21 @@ function renderCategories() {
         data-action="down"
         data-id="${category.id}"
         ${index === categories.length - 1 ? "disabled" : ""}
+        style="min-width:42px;padding:10px 12px;background:rgba(255,255,255,.17);color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:9px;font-size:14px;font-weight:900;cursor:pointer;opacity:${index === categories.length - 1 ? ".45" : "1"};"
       >▼</button>
 
       <button
         type="button"
         data-action="edit"
         data-id="${category.id}"
+        style="padding:10px 14px;background:#fff;color:#1458c7;border:0;border-radius:9px;font-size:13px;font-weight:900;cursor:pointer;"
       >ပြင်မယ်</button>
 
       <button
         type="button"
         data-action="delete"
         data-id="${category.id}"
-        style="color:#dc2626;"
+        style="padding:10px 14px;background:#ffe8e8;color:#b42318;border:0;border-radius:9px;font-size:13px;font-weight:900;cursor:pointer;"
       >ဖျက်မယ်</button>
     </div>
   `).join("");
@@ -272,7 +291,8 @@ function showCategoryMessage(message, success = false) {
   if (!element) return;
 
   element.textContent = message;
-  element.style.color = success ? "#16a34a" : "#dc2626";
+  element.style.color = "#ffffff";
+  element.style.fontWeight = "800";
 }
 
 // =========================================
