@@ -1,18 +1,59 @@
 
+/* =========================================
+   K7 DIGITAL STORE - ADMIN DASHBOARD
+   Supabase + Category Manager + Product CRUD
+========================================= */
+
 const SUPABASE_URL = "https://wdcrskelhwnrzmlucxoi.supabase.co";
 const SUPABASE_KEY = "sb_publishable_cecHLOKznBIQcu3YYEcPmA_ld8sPwJb";
 
-const { createClient } = supabase;
-const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+// =========================================
+// ELEMENTS
+// =========================================
+
+const productForm = document.querySelector("#productForm");
+const saveProductForm = document.querySelector("#saveProductForm");
+const adminProductList = document.querySelector("#adminProductList");
+const productCount = document.querySelector("#productCount");
+
+const addProductBtn = document.querySelector("#addProductBtn");
+const cancelProductBtn = document.querySelector("#cancelProductBtn");
+const logoutBtn = document.querySelector("#logoutBtn");
+
+const editProductId = document.querySelector("#editProductId");
+const productName = document.querySelector("#productName");
+const productDescription = document.querySelector("#productDescription");
+const productPrice = document.querySelector("#productPrice");
+const productType = document.querySelector("#productType");
+const productImage = document.querySelector("#productImage");
+const productImageFile = document.querySelector("#productImageFile");
+const productActive = document.querySelector("#productActive");
+
+const imagePreview = document.querySelector("#imagePreview");
+const imagePreviewBox = document.querySelector("#imagePreviewBox");
+
+const formMessage = document.querySelector("#formMessage");
+const saveProductBtn = document.querySelector("#saveProductBtn");
+
+// =========================================
+// STATE
+// =========================================
 
 let categories = [];
 let products = [];
 let editingCategoryId = null;
 
-const $ = (id) => document.getElementById(id);
+// =========================================
+// HELPERS
+// =========================================
 
 function escapeHTML(value = "") {
-  return String(value).replace(/[&<>"']/g, (char) => ({
+  return String(value).replace(/[&<>"']/g, char => ({
     "&": "&amp;",
     "<": "&lt;",
     ">": "&gt;",
@@ -21,76 +62,72 @@ function escapeHTML(value = "") {
   })[char]);
 }
 
-function money(value) {
-  return "Ks " + Number(value || 0).toLocaleString("en-US");
-}
-
 function showMessage(message, success = false) {
-  const box = $("formMessage");
-  if (!box) {
-    alert(message);
-    return;
-  }
+  if (!formMessage) return;
 
-  box.textContent = message;
-  box.style.color = success ? "#16803c" : "#dc2626";
-  box.style.display = "block";
+  formMessage.textContent = message;
+  formMessage.style.color = success ? "#16a34a" : "#dc2626";
 }
 
-function hideMessage() {
-  const box = $("formMessage");
-  if (box) {
-    box.textContent = "";
-    box.style.display = "none";
-  }
+function formatPrice(price) {
+  return "Ks " + Number(price || 0).toLocaleString("en-US");
 }
 
-/* =========================
-   ADMIN AUTHENTICATION
-========================= */
+// =========================================
+// ADMIN AUTH CHECK
+// =========================================
 
 async function checkAdmin() {
-  const { data: { user }, error } = await db.auth.getUser();
+  const {
+    data: { user },
+    error: userError
+  } = await db.auth.getUser();
 
-  if (error || !user) {
-    location.href = "admin.html";
+  if (userError || !user) {
+    window.location.href = "admin.html";
     return false;
   }
 
-  const { data, error: adminError } = await db
+  const { data: admin, error: adminError } = await db
     .from("admin_users")
-    .select("id")
-    .eq("id", user.id)
+    .select("user_id")
+    .eq("user_id", user.id)
     .maybeSingle();
 
-  if (adminError || !data) {
-    alert("Admin account မဟုတ်ပါ။");
+  if (adminError) {
+    console.error("Admin check error:", adminError);
+    alert("Admin စစ်ဆေးရာတွင် ပြဿနာရှိနေပါတယ်။");
+    return false;
+  }
+
+  if (!admin) {
+    alert("ဒီအကောင့်သည် Admin အကောင့်မဟုတ်ပါ။");
     await db.auth.signOut();
-    location.href = "admin.html";
+    window.location.href = "admin.html";
     return false;
   }
 
   return true;
 }
 
-/* =========================
-   CATEGORY MANAGEMENT UI
-========================= */
+// =========================================
+// CATEGORY MANAGER UI
+// =========================================
 
 function createCategoryUI() {
-  const adminProducts = document.querySelector(".admin-products");
+  if (document.querySelector("#categoryManager")) return;
+
   const adminTitle = document.querySelector(".admin-title");
 
-  if (!adminProducts || !adminTitle) {
-    console.error("Category UI ထည့်ရန် .admin-products သို့မဟုတ် .admin-title မတွေ့ပါ။");
+  if (!adminTitle) {
+    console.error("Admin title element not found.");
     return;
   }
 
-  if ($("categoryManagement")) return;
+  const categoryManager = document.createElement("section");
+  categoryManager.id = "categoryManager";
 
-  const section = document.createElement("section");
-  section.id = "categoryManagement";
-  section.style.cssText = `
+  categoryManager.style.cssText = `
     background:#fff;
     padding:20px;
     margin:20px 0;
@@ -98,82 +135,53 @@ function createCategoryUI() {
     border:1px solid #e5e7eb;
   `;
 
-  section.innerHTML = `
-    <h2 style="margin:0 0 8px;font-size:20px;">Category Management</h2>
-    <p style="color:#64748b;font-size:13px;margin:0 0 16px;">
-      Category အသစ်ထည့်ပြီး Product များကို သက်ဆိုင်ရာ Category အောက်တွင် ထည့်နိုင်ပါသည်။
-    </p>
+  categoryManager.innerHTML = `
+    <h3 style="margin:0 0 15px;color:#1769e8;">
+      Category Management
+    </h3>
 
-    <form id="categoryForm" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
       <input
-        id="categoryNameInput"
         type="text"
-        placeholder="Category အမည် ထည့်ပါ"
-        required
-        maxlength="60"
-        style="flex:1;min-width:180px;padding:12px;border:1px solid #d1d5db;border-radius:8px;"
+        id="newCategoryName"
+        placeholder="Category အမည်ထည့်ပါ"
+        style="flex:1;min-width:180px;padding:12px;border:1px solid #ddd;border-radius:8px;"
       >
-      <button
-        type="submit"
-        id="categorySaveButton"
-        style="padding:11px 18px;background:#1769e8;color:white;border:0;border-radius:8px;cursor:pointer;"
-      >Category ထည့်မယ်</button>
+
       <button
         type="button"
-        id="categoryCancelButton"
-        style="display:none;padding:11px 18px;background:#64748b;color:white;border:0;border-radius:8px;cursor:pointer;"
-      >မလုပ်တော့ပါ</button>
-    </form>
+        id="addCategoryBtn"
+        style="padding:12px 20px;background:#1769e8;color:white;border:0;border-radius:8px;cursor:pointer;"
+      >
+        Category ထည့်မယ်
+      </button>
+    </div>
 
-    <div id="categoryMessage" style="font-size:13px;margin-bottom:12px;"></div>
-    <div id="categoryList"></div>
+    <p id="categoryMessage" style="font-size:13px;margin:12px 0;"></p>
+
+    <div id="categoryList" style="display:grid;gap:10px;"></div>
   `;
 
-  adminTitle.insertAdjacentElement("afterend", section);
+  adminTitle.insertAdjacentElement("afterend", categoryManager);
 
-  $("categoryForm").addEventListener("submit", saveCategory);
-  $("categoryCancelButton").addEventListener("click", cancelCategoryEdit);
+  document.querySelector("#addCategoryBtn")
+    .addEventListener("click", addCategory);
 
-  $("categoryList").addEventListener("click", async (event) => {
-    const button = event.target.closest("button[data-action]");
-    if (!button) return;
+  document.querySelector("#newCategoryName")
+    .addEventListener("keydown", event => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        addCategory();
+      }
+    });
 
-    const id = Number(button.dataset.id);
-    const action = button.dataset.action;
-
-    if (action === "edit") {
-      editCategory(id);
-    }
-
-    if (action === "delete") {
-      await deleteCategory(id);
-    }
-
-    if (action === "up") {
-      await moveCategory(id, -1);
-    }
-
-    if (action === "down") {
-      await moveCategory(id, 1);
-    }
-  });
+  document.querySelector("#categoryList")
+    .addEventListener("click", handleCategoryAction);
 }
 
-function categoryMessage(message, success = false) {
-  const box = $("categoryMessage");
-  if (!box) return;
-
-  box.textContent = message;
-  box.style.color = success ? "#16803c" : "#dc2626";
-}
-
-function cancelCategoryEdit() {
-  editingCategoryId = null;
-  $("categoryNameInput").value = "";
-  $("categorySaveButton").textContent = "Category ထည့်မယ်";
-  $("categoryCancelButton").style.display = "none";
-  categoryMessage("");
-}
+// =========================================
+// LOAD CATEGORIES
+// =========================================
 
 async function loadCategories() {
   const { data, error } = await db
@@ -183,175 +191,228 @@ async function loadCategories() {
     .order("id", { ascending: true });
 
   if (error) {
-    console.error("Category loading error:", error);
-    categoryMessage("Category များဖတ်မရပါ။ " + error.message);
+    console.error("Category load error:", error);
+    showCategoryMessage("Category များ ရယူ၍မရပါ။ " + error.message);
     return;
   }
 
   categories = data || [];
+
   renderCategories();
-  updateProductCategorySelect();
-  loadAdminProducts();
+  updateCategorySelect();
 }
 
+// =========================================
+// RENDER CATEGORY LIST
+// =========================================
+
 function renderCategories() {
-  const list = $("categoryList");
+  const list = document.querySelector("#categoryList");
   if (!list) return;
 
   if (!categories.length) {
     list.innerHTML = `
-      <p style="color:#64748b;font-size:14px;">Category မရှိသေးပါ။</p>
+      <p style="color:#888;">Category မရှိသေးပါ။</p>
     `;
     return;
   }
 
   list.innerHTML = categories.map((category, index) => `
-    <div style="
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-      padding:12px;
-      margin-bottom:8px;
-      border:1px solid #e5e7eb;
-      border-radius:9px;
-    ">
-      <div style="font-weight:600;">
-        ${index + 1}. ${escapeHTML(category.name)}
-      </div>
+    <div
+      style="
+        display:flex;
+        align-items:center;
+        gap:8px;
+        flex-wrap:wrap;
+        padding:12px;
+        border:1px solid #e5e7eb;
+        border-radius:9px;
+      "
+    >
+      <strong style="flex:1;min-width:100px;">
+        ${escapeHTML(category.name)}
+      </strong>
 
-      <div style="display:flex;gap:5px;flex-wrap:wrap;">
-        <button data-action="up" data-id="${category.id}"
-          ${index === 0 ? "disabled" : ""}
-          style="padding:7px 10px;border:0;border-radius:6px;cursor:pointer;">
-          ↑
-        </button>
+      <button
+        type="button"
+        data-action="up"
+        data-id="${category.id}"
+        ${index === 0 ? "disabled" : ""}
+      >▲</button>
 
-        <button data-action="down" data-id="${category.id}"
-          ${index === categories.length - 1 ? "disabled" : ""}
-          style="padding:7px 10px;border:0;border-radius:6px;cursor:pointer;">
-          ↓
-        </button>
+      <button
+        type="button"
+        data-action="down"
+        data-id="${category.id}"
+        ${index === categories.length - 1 ? "disabled" : ""}
+      >▼</button>
 
-        <button data-action="edit" data-id="${category.id}"
-          style="padding:7px 10px;background:#1769e8;color:white;border:0;border-radius:6px;cursor:pointer;">
-          ပြင်မယ်
-        </button>
+      <button
+        type="button"
+        data-action="edit"
+        data-id="${category.id}"
+      >ပြင်မယ်</button>
 
-        <button data-action="delete" data-id="${category.id}"
-          style="padding:7px 10px;background:#dc2626;color:white;border:0;border-radius:6px;cursor:pointer;">
-          ဖျက်မယ်
-        </button>
-      </div>
+      <button
+        type="button"
+        data-action="delete"
+        data-id="${category.id}"
+        style="color:#dc2626;"
+      >ဖျက်မယ်</button>
     </div>
   `).join("");
 }
 
-async function saveCategory(event) {
-  event.preventDefault();
+// =========================================
+// CATEGORY MESSAGE
+// =========================================
 
-  const name = $("categoryNameInput").value.trim();
-  if (!name) return;
+function showCategoryMessage(message, success = false) {
+  const element = document.querySelector("#categoryMessage");
+  if (!element) return;
 
-  const saveButton = $("categorySaveButton");
-  saveButton.disabled = true;
+  element.textContent = message;
+  element.style.color = success ? "#16a34a" : "#dc2626";
+}
 
-  let result;
+// =========================================
+// ADD CATEGORY
+// =========================================
 
-  if (editingCategoryId) {
-    result = await db
-      .from("categories")
-      .update({ name })
-      .eq("id", editingCategoryId);
-  } else {
-    const maxOrder = categories.length
-      ? Math.max(...categories.map(c => Number(c.display_order || 0)))
-      : -1;
+async function addCategory() {
+  const input = document.querySelector("#newCategoryName");
+  const name = input.value.trim();
 
-    // category_type သည် လက်ရှိ database constraint နှင့် ကိုက်ညီရန် game ထည့်ထားသည်။
-    // Store ပေါ်တွင် Game / Digital အုပ်စုခွဲပြသခြင်း မရှိပါ။
-    result = await db
-      .from("categories")
-      .insert({
-        name,
-        category_type: "game",
-        display_order: maxOrder + 1
-      });
-  }
-
-  saveButton.disabled = false;
-
-  if (result.error) {
-    if (result.error.code === "23505") {
-      categoryMessage("ဒီ Category အမည် ရှိပြီးသားပါ။");
-    } else {
-      categoryMessage("သိမ်းဆည်းမရပါ။ " + result.error.message);
-    }
+  if (!name) {
+    showCategoryMessage("Category အမည်ထည့်ပါ။");
     return;
   }
 
-  cancelCategoryEdit();
-  categoryMessage("Category သိမ်းဆည်းပြီးပါပြီ။", true);
-  await loadCategories();
-}
-
-function editCategory(id) {
-  const category = categories.find(c => Number(c.id) === id);
-  if (!category) return;
-
-  editingCategoryId = id;
-  $("categoryNameInput").value = category.name;
-  $("categorySaveButton").textContent = "ပြင်ဆင်သိမ်းမယ်";
-  $("categoryCancelButton").style.display = "inline-block";
-  $("categoryNameInput").focus();
-}
-
-async function deleteCategory(id) {
-  const category = categories.find(c => Number(c.id) === id);
-  if (!category) return;
-
-  const confirmed = confirm(
-    `"${category.name}" ကို ဖျက်မှာ သေချာပါသလား?\n\nဒီ Category နဲ့ ချိတ်ထားတဲ့ Product တွေမှာ Category မရှိတော့ပါ။`
-  );
-
-  if (!confirmed) return;
+  const maxOrder = categories.length
+    ? Math.max(...categories.map(item => Number(item.display_order || 0)))
+    : -1;
 
   const { error } = await db
     .from("categories")
-    .delete()
-    .eq("id", id);
+    .insert({
+      name: name,
+      category_type: "game",
+      display_order: maxOrder + 1
+    });
 
   if (error) {
-    categoryMessage("ဖျက်မရပါ။ " + error.message);
+    console.error(error);
+
+    if (error.code === "23505") {
+      showCategoryMessage("ဒီ Category အမည် ရှိပြီးသားပါ။");
+    } else {
+      showCategoryMessage("Category ထည့်၍မရပါ။ " + error.message);
+    }
+
     return;
   }
 
-  categoryMessage("Category ဖျက်ပြီးပါပြီ။", true);
+  input.value = "";
+
+  showCategoryMessage("Category ထည့်ပြီးပါပြီ။", true);
+
   await loadCategories();
 }
 
-async function moveCategory(id, direction) {
-  const index = categories.findIndex(c => Number(c.id) === id);
-  const targetIndex = index + direction;
+// =========================================
+// CATEGORY ACTIONS
+// =========================================
 
-  if (index < 0 || targetIndex < 0 || targetIndex >= categories.length) {
-    return;
+async function handleCategoryAction(event) {
+  const button = event.target.closest("button[data-action]");
+  if (!button) return;
+
+  const id = Number(button.dataset.id);
+  const action = button.dataset.action;
+
+  const index = categories.findIndex(item => Number(item.id) === id);
+  if (index === -1) return;
+
+  const category = categories[index];
+
+  if (action === "edit") {
+    const newName = prompt("Category အမည်အသစ်ထည့်ပါ။", category.name);
+
+    if (newName === null) return;
+
+    const name = newName.trim();
+
+    if (!name) {
+      alert("Category အမည် လိုအပ်ပါတယ်။");
+      return;
+    }
+
+    const { error } = await db
+      .from("categories")
+      .update({ name })
+      .eq("id", id);
+
+    if (error) {
+      alert(error.code === "23505"
+        ? "ဒီအမည်ကို အသုံးပြုထားပြီးသားပါ။"
+        : error.message);
+      return;
+    }
+
+    await loadCategories();
+    showCategoryMessage("Category အမည် ပြင်ပြီးပါပြီ။", true);
   }
 
+  if (action === "delete") {
+    const confirmed = confirm(
+      `"${category.name}" ကို ဖျက်မှာ သေချာပါသလား။`
+    );
+
+    if (!confirmed) return;
+
+    const { error } = await db
+      .from("categories")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      alert("ဖျက်၍မရပါ။ " + error.message);
+      return;
+    }
+
+    await loadCategories();
+    await loadAdminProducts();
+
+    showCategoryMessage("Category ဖျက်ပြီးပါပြီ။", true);
+  }
+
+  if (action === "up" && index > 0) {
+    await moveCategory(index, index - 1);
+  }
+
+  if (action === "down" && index < categories.length - 1) {
+    await moveCategory(index, index + 1);
+  }
+}
+
+// =========================================
+// REORDER CATEGORIES
+// =========================================
+
+async function moveCategory(fromIndex, toIndex) {
   const reordered = [...categories];
-  const temp = reordered[index];
-  reordered[index] = reordered[targetIndex];
-  reordered[targetIndex] = temp;
+
+  const [moved] = reordered.splice(fromIndex, 1);
+  reordered.splice(toIndex, 0, moved);
 
   for (let i = 0; i < reordered.length; i++) {
     const { error } = await db
       .from("categories")
-      .update({ display_order: i + 1 })
+      .update({ display_order: i })
       .eq("id", reordered[i].id);
 
     if (error) {
-      categoryMessage("အစဉ်ပြောင်းမရပါ။ " + error.message);
+      alert("Category အစီအစဉ် ပြောင်း၍မရပါ။ " + error.message);
       await loadCategories();
       return;
     }
@@ -360,235 +421,68 @@ async function moveCategory(id, direction) {
   await loadCategories();
 }
 
-/* =========================
-   PRODUCT CATEGORY SELECT
-========================= */
+// =========================================
+// PRODUCT CATEGORY SELECT
+// =========================================
 
-function updateProductCategorySelect(selectedId = null) {
-  let select = $("productCategory");
+function createProductCategorySelect() {
+  if (document.querySelector("#productCategory")) return;
 
-  // HTML အဟောင်းတွင် Category select မရှိသေးပါက အလိုအလျောက်ထည့်ပေးမည်။
-  if (!select) {
-    const productType = $("productType");
-
-    if (!productType) return;
-
-    const wrapper = productType.parentElement;
-    if (!wrapper) return;
-
-    const field = document.createElement("div");
-    field.style.marginTop = "12px";
-    field.innerHTML = `
-      <label for="productCategory" style="display:block;margin-bottom:6px;">
-        Product Category
-      </label>
-      <select id="productCategory"
-        style="width:100%;padding:11px;border:1px solid #d1d5db;border-radius:8px;">
-      </select>
-    `;
-
-    wrapper.insertAdjacentElement("afterend", field);
-    select = $("productCategory");
+  if (!productType) {
+    console.error("productType element not found.");
+    return;
   }
+
+  const wrapper = document.createElement("div");
+  wrapper.style.marginTop = "12px";
+
+  wrapper.innerHTML = `
+    <label
+      for="productCategory"
+      style="display:block;margin-bottom:7px;font-weight:600;"
+    >
+      Product Category
+    </label>
+
+    <select
+      id="productCategory"
+      required
+      style="width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;"
+    >
+      <option value="">Category ရွေးပါ</option>
+    </select>
+  `;
+
+  productType.insertAdjacentElement("afterend", wrapper);
+}
+
+// =========================================
+// UPDATE CATEGORY SELECT
+// =========================================
+
+function updateCategorySelect(selectedId = "") {
+  const select = document.querySelector("#productCategory");
+  if (!select) return;
 
   select.innerHTML = `
     <option value="">Category ရွေးပါ</option>
     ${categories.map(category => `
-      <option value="${category.id}">
+      <option
+        value="${category.id}"
+        ${String(category.id) === String(selectedId) ? "selected" : ""}
+      >
         ${escapeHTML(category.name)}
       </option>
     `).join("")}
   `;
-
-  if (selectedId !== null && selectedId !== undefined) {
-    select.value = String(selectedId);
-  }
 }
 
-/* =========================
-   PRODUCT IMAGE UPLOAD
-========================= */
-
-async function uploadProductImage() {
-  const fileInput = $("productImageFile");
-  const file = fileInput?.files?.[0];
-
-  if (!file) {
-    return $("productImage")?.value.trim() || null;
-  }
-
-  if (!file.type.startsWith("image/")) {
-    throw new Error("Image ဖိုင်ကိုသာ ရွေးချယ်ပါ။");
-  }
-
-  const extension = file.name.split(".").pop().toLowerCase();
-  const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${extension}`;
-  const filePath = fileName;
-
-  const { error } = await db.storage
-    .from("product-images")
-    .upload(filePath, file, {
-      cacheControl: "3600",
-      upsert: false
-    });
-
-  if (error) throw error;
-
-  const { data } = db.storage
-    .from("product-images")
-    .getPublicUrl(filePath);
-
-  return data.publicUrl;
-}
-
-function setupImagePreview() {
-  const input = $("productImageFile");
-  if (!input) return;
-
-  input.addEventListener("change", () => {
-    const file = input.files?.[0];
-    if (!file) return;
-
-    const preview = $("imagePreview");
-    const box = $("imagePreviewBox");
-
-    if (preview) {
-      preview.src = URL.createObjectURL(file);
-    }
-
-    if (box) {
-      box.style.display = "block";
-    }
-  });
-}
-
-/* =========================
-   PRODUCT FORM
-========================= */
-
-function resetProductForm() {
-  $("saveProductForm")?.reset();
-
-  if ($("editProductId")) $("editProductId").value = "";
-  if ($("productActive")) $("productActive").checked = true;
-
-  updateProductCategorySelect();
-
-  const preview = $("imagePreview");
-  const previewBox = $("imagePreviewBox");
-
-  if (preview) preview.src = "";
-  if (previewBox) previewBox.style.display = "none";
-
-  if ($("productForm")) $("productForm").style.display = "none";
-
-  hideMessage();
-}
-
-function setupProductForm() {
-  const form = $("saveProductForm");
-  if (!form) return;
-
-  form.addEventListener("submit", saveProduct);
-
-  $("addProductBtn")?.addEventListener("click", () => {
-    resetProductForm();
-    $("productForm").style.display = "block";
-  });
-
-  $("cancelProductBtn")?.addEventListener("click", resetProductForm);
-
-  $("productType")?.addEventListener("change", () => {
-    // Category အားလုံးကို ပြသမည်။ Game / Digital အလိုက် မစစ်တော့ပါ။
-    updateProductCategorySelect($("productCategory")?.value || null);
-  });
-
-  setupImagePreview();
-}
-
-async function saveProduct(event) {
-  event.preventDefault();
-  hideMessage();
-
-  const id = $("editProductId")?.value;
-  const name = $("productName")?.value.trim();
-  const description = $("productDescription")?.value.trim();
-  const price = Number($("productPrice")?.value || 0);
-  const productType = $("productType")?.value || "game";
-  const categoryId = $("productCategory")?.value;
-  const isActive = $("productActive")?.checked ?? true;
-
-  if (!name) {
-    showMessage("Product အမည် ထည့်ပါ။");
-    return;
-  }
-
-  if (!categoryId) {
-    showMessage("Category ရွေးချယ်ပါ။");
-    return;
-  }
-
-  if (!Number.isFinite(price) || price < 0) {
-    showMessage("ဈေးနှုန်း မှန်ကန်စွာ ထည့်ပါ။");
-    return;
-  }
-
-  const saveButton = $("saveProductBtn");
-  if (saveButton) {
-    saveButton.disabled = true;
-    saveButton.textContent = "သိမ်းဆည်းနေသည်...";
-  }
-
-  try {
-    const imageUrl = await uploadProductImage();
-
-    const payload = {
-      name,
-      description,
-      price,
-      product_type: productType,
-      category_id: Number(categoryId),
-      image_url: imageUrl,
-      is_active: isActive
-    };
-
-    let result;
-
-    if (id) {
-      result = await db
-        .from("products")
-        .update(payload)
-        .eq("id", id);
-    } else {
-      result = await db
-        .from("products")
-        .insert(payload);
-    }
-
-    if (result.error) throw result.error;
-
-    showMessage("Product သိမ်းဆည်းပြီးပါပြီ။", true);
-    resetProductForm();
-    await loadAdminProducts();
-
-  } catch (error) {
-    console.error(error);
-    showMessage("သိမ်းဆည်းမရပါ။ " + error.message);
-  } finally {
-    if (saveButton) {
-      saveButton.disabled = false;
-      saveButton.textContent = "သိမ်းမယ်";
-    }
-  }
-}
-
-/* =========================
-   LOAD ADMIN PRODUCTS
-========================= */
+// =========================================
+// LOAD PRODUCTS
+// =========================================
 
 async function loadAdminProducts() {
-  const list = $("adminProductList");
-  if (!list) return;
+  if (!adminProductList) return;
 
   const { data, error } = await db
     .from("products")
@@ -596,179 +490,421 @@ async function loadAdminProducts() {
     .order("id", { ascending: false });
 
   if (error) {
-    list.innerHTML = `<p>Product ဖတ်မရပါ။ ${escapeHTML(error.message)}</p>`;
+    console.error("Product load error:", error);
+    adminProductList.innerHTML = `
+      <p>Product များ ရယူ၍မရပါ။ ${escapeHTML(error.message)}</p>
+    `;
     return;
   }
 
   products = data || [];
 
-  if ($("productCount")) {
-    $("productCount").textContent = products.length;
+  if (productCount) {
+    productCount.textContent = products.length;
   }
 
-  const categoryMap = new Map(
-    categories.map(category => [
-      Number(category.id),
-      category.name
-    ])
-  );
+  renderAdminProducts();
+}
+
+// =========================================
+// RENDER ADMIN PRODUCTS
+// =========================================
+
+function renderAdminProducts() {
+  if (!adminProductList) return;
 
   if (!products.length) {
-    list.innerHTML = `<p>Product မရှိသေးပါ။</p>`;
+    adminProductList.innerHTML = `
+      <p style="color:#888;">Product မရှိသေးပါ။</p>
+    `;
     return;
   }
 
-  list.innerHTML = products.map(product => {
-    const categoryName = categoryMap.get(Number(product.category_id)) || "Category မရှိ";
+  adminProductList.innerHTML = products.map(product => {
+    const category = categories.find(
+      item => Number(item.id) === Number(product.category_id)
+    );
 
     return `
-      <div style="
-        display:flex;
-        align-items:center;
-        gap:12px;
-        flex-wrap:wrap;
-        padding:12px;
-        margin-bottom:10px;
-        border:1px solid #e5e7eb;
-        border-radius:10px;
-      ">
-        <img
-          src="${escapeHTML(product.image_url || "")}"
-          alt=""
-          style="width:65px;height:65px;object-fit:cover;border-radius:8px;background:#f1f5f9;"
-          onerror="this.style.display='none'"
-        >
+      <div
+        style="
+          display:flex;
+          align-items:center;
+          gap:14px;
+          padding:14px;
+          margin-bottom:12px;
+          border:1px solid #e5e7eb;
+          border-radius:12px;
+          flex-wrap:wrap;
+        "
+      >
+        ${
+          product.image_url
+            ? `<img
+                src="${escapeHTML(product.image_url)}"
+                alt=""
+                style="width:75px;height:75px;object-fit:cover;border-radius:9px;"
+              >`
+            : ""
+        }
 
         <div style="flex:1;min-width:150px;">
           <strong>${escapeHTML(product.name)}</strong>
-          <div style="font-size:13px;color:#64748b;">
-            ${escapeHTML(categoryName)}
-          </div>
-          <div style="font-weight:600;color:#1769e8;">
-            ${money(product.price)}
-          </div>
-          <div style="font-size:12px;color:${product.is_active ? "#16803c" : "#dc2626"};">
+
+          <p style="margin:5px 0;">
+            ${formatPrice(product.price)}
+          </p>
+
+          <small>
+            Category: ${escapeHTML(category?.name || "မရွေးရသေး")}
+          </small>
+
+          <br>
+
+          <small>
             ${product.is_active ? "Active" : "Inactive"}
-          </div>
+          </small>
         </div>
 
-        <div style="display:flex;gap:6px;">
-          <button
-            type="button"
-            data-product-action="edit"
-            data-id="${product.id}"
-            style="padding:8px 12px;background:#1769e8;color:white;border:0;border-radius:6px;cursor:pointer;">
-            ပြင်မယ်
-          </button>
+        <button
+          type="button"
+          data-product-action="edit"
+          data-id="${product.id}"
+        >ပြင်မယ်</button>
 
-          <button
-            type="button"
-            data-product-action="delete"
-            data-id="${product.id}"
-            style="padding:8px 12px;background:#dc2626;color:white;border:0;border-radius:6px;cursor:pointer;">
-            ဖျက်မယ်
-          </button>
-        </div>
+        <button
+          type="button"
+          data-product-action="delete"
+          data-id="${product.id}"
+          style="color:#dc2626;"
+        >ဖျက်မယ်</button>
       </div>
     `;
   }).join("");
 }
 
-async function editProduct(id) {
-  const product = products.find(p => Number(p.id) === id);
-  if (!product) return;
+// =========================================
+// PRODUCT ACTIONS
+// =========================================
 
-  $("editProductId").value = product.id;
-  $("productName").value = product.name || "";
-  $("productDescription").value = product.description || "";
-  $("productPrice").value = product.price ?? 0;
-  $("productType").value = product.product_type || "game";
-  $("productActive").checked = Boolean(product.is_active);
-
-  updateProductCategorySelect(product.category_id);
-
-  if ($("productImage")) {
-    $("productImage").value = product.image_url || "";
-  }
-
-  if ($("imagePreview") && product.image_url) {
-    $("imagePreview").src = product.image_url;
-  }
-
-  if ($("imagePreviewBox")) {
-    $("imagePreviewBox").style.display = product.image_url ? "block" : "none";
-  }
-
-  if ($("productForm")) {
-    $("productForm").style.display = "block";
-  }
-
-  hideMessage();
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-async function deleteProduct(id) {
-  const product = products.find(p => Number(p.id) === id);
-  if (!product) return;
-
-  if (!confirm(`"${product.name}" ကို ဖျက်မှာ သေချာပါသလား?`)) {
-    return;
-  }
-
-  const { error } = await db
-    .from("products")
-    .delete()
-    .eq("id", id);
-
-  if (error) {
-    alert("Product ဖျက်မရပါ။ " + error.message);
-    return;
-  }
-
-  await loadAdminProducts();
-}
-
-function setupProductActions() {
-  const list = $("adminProductList");
-  if (!list) return;
-
-  list.addEventListener("click", async (event) => {
+if (adminProductList) {
+  adminProductList.addEventListener("click", async event => {
     const button = event.target.closest("button[data-product-action]");
     if (!button) return;
 
     const id = Number(button.dataset.id);
+    const action = button.dataset.productAction;
 
-    if (button.dataset.productAction === "edit") {
-      editProduct(id);
+    const product = products.find(item => Number(item.id) === id);
+    if (!product) return;
+
+    if (action === "edit") {
+      editProduct(product);
     }
 
-    if (button.dataset.productAction === "delete") {
-      await deleteProduct(id);
+    if (action === "delete") {
+      if (!confirm(`"${product.name}" ကို ဖျက်မှာ သေချာပါသလား။`)) {
+        return;
+      }
+
+      const { error } = await db
+        .from("products")
+        .delete()
+        .eq("id", id);
+
+      if (error) {
+        alert("Product ဖျက်၍မရပါ။ " + error.message);
+        return;
+      }
+
+      await loadAdminProducts();
     }
   });
 }
 
-/* =========================
-   LOGOUT & START
-========================= */
+// =========================================
+// EDIT PRODUCT
+// =========================================
 
-function setupLogout() {
-  $("logoutBtn")?.addEventListener("click", async () => {
-    await db.auth.signOut();
-    location.href = "admin.html";
+function editProduct(product) {
+  if (editProductId) editProductId.value = product.id;
+
+  if (productName) productName.value = product.name || "";
+  if (productDescription) {
+    productDescription.value = product.description || "";
+  }
+  if (productPrice) productPrice.value = product.price || 0;
+  if (productType) {
+    productType.value = product.product_type || "game";
+  }
+
+  if (productImage) {
+    productImage.value = product.image_url || "";
+  }
+
+  if (productActive) {
+    productActive.checked = product.is_active !== false;
+  }
+
+  updateCategorySelect(product.category_id || "");
+
+  if (imagePreview && product.image_url) {
+    imagePreview.src = product.image_url;
+  }
+
+  if (imagePreviewBox) {
+    imagePreviewBox.style.display = product.image_url ? "block" : "none";
+  }
+
+  if (productForm) {
+    productForm.style.display = "block";
+    productForm.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }
+}
+
+// =========================================
+// RESET PRODUCT FORM
+// =========================================
+
+function resetProductForm() {
+  if (saveProductForm) saveProductForm.reset();
+
+  if (editProductId) editProductId.value = "";
+
+  if (productImage) productImage.value = "";
+
+  if (imagePreview) imagePreview.src = "";
+
+  if (imagePreviewBox) {
+    imagePreviewBox.style.display = "none";
+  }
+
+  updateCategorySelect("");
+
+  showMessage("");
+}
+
+// =========================================
+// OPEN / CLOSE PRODUCT FORM
+// =========================================
+
+if (addProductBtn) {
+  addProductBtn.addEventListener("click", () => {
+    resetProductForm();
+
+    if (productForm) {
+      productForm.style.display = "block";
+      productForm.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
   });
 }
+
+if (cancelProductBtn) {
+  cancelProductBtn.addEventListener("click", () => {
+    resetProductForm();
+
+    if (productForm) {
+      productForm.style.display = "none";
+    }
+  });
+}
+
+// =========================================
+// IMAGE PREVIEW
+// =========================================
+
+if (productImageFile) {
+  productImageFile.addEventListener("change", () => {
+    const file = productImageFile.files?.[0];
+
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      alert("Image ဖိုင်ကိုသာ ရွေးချယ်ပါ။");
+      productImageFile.value = "";
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = event => {
+      if (imagePreview) {
+        imagePreview.src = event.target.result;
+      }
+
+      if (imagePreviewBox) {
+        imagePreviewBox.style.display = "block";
+      }
+    };
+
+    reader.readAsDataURL(file);
+  });
+}
+
+// =========================================
+// IMAGE UPLOAD
+// =========================================
+
+async function uploadProductImage() {
+  const file = productImageFile?.files?.[0];
+
+  if (!file) {
+    return productImage?.value || null;
+  }
+
+  const extension = file.name.split(".").pop();
+  const fileName =
+    `${Date.now()}-${Math.random().toString(36).slice(2)}.${extension}`;
+
+  const { error } = await db.storage
+    .from("product-images")
+    .upload(fileName, file, {
+      cacheControl: "3600",
+      upsert: false
+    });
+
+  if (error) {
+    throw error;
+  }
+
+  const { data } = db.storage
+    .from("product-images")
+    .getPublicUrl(fileName);
+
+  return data.publicUrl;
+}
+
+// =========================================
+// SAVE PRODUCT
+// =========================================
+
+if (saveProductForm) {
+  saveProductForm.addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const name = productName?.value.trim();
+    const description = productDescription?.value.trim() || "";
+    const price = Number(productPrice?.value || 0);
+    const product_type = productType?.value || "game";
+
+    const category_id = Number(
+      document.querySelector("#productCategory")?.value
+    );
+
+    if (!name) {
+      showMessage("Product အမည်ထည့်ပါ။");
+      return;
+    }
+
+    if (!category_id) {
+      showMessage("Category ရွေးချယ်ပါ။");
+      return;
+    }
+
+    if (!Number.isFinite(price) || price < 0) {
+      showMessage("ဈေးနှုန်း မှန်ကန်စွာထည့်ပါ။");
+      return;
+    }
+
+    if (saveProductBtn) {
+      saveProductBtn.disabled = true;
+      saveProductBtn.textContent = "Saving...";
+    }
+
+    try {
+      const image_url = await uploadProductImage();
+
+      const productData = {
+        name,
+        description,
+        price,
+        product_type,
+        category_id,
+        image_url,
+        is_active: productActive
+          ? productActive.checked
+          : true
+      };
+
+      const id = editProductId?.value;
+
+      let result;
+
+      if (id) {
+        result = await db
+          .from("products")
+          .update(productData)
+          .eq("id", Number(id));
+      } else {
+        result = await db
+          .from("products")
+          .insert(productData);
+      }
+
+      if (result.error) {
+        throw result.error;
+      }
+
+      showMessage("Product သိမ်းဆည်းပြီးပါပြီ။", true);
+
+      resetProductForm();
+
+      if (productForm) {
+        productForm.style.display = "none";
+      }
+
+      await loadAdminProducts();
+
+    } catch (error) {
+      console.error("Save product error:", error);
+      showMessage("သိမ်းဆည်း၍မရပါ။ " + error.message);
+
+    } finally {
+      if (saveProductBtn) {
+        saveProductBtn.disabled = false;
+        saveProductBtn.textContent = "Save Product";
+      }
+    }
+  });
+}
+
+// =========================================
+// LOGOUT
+// =========================================
+
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", async () => {
+    const { error } = await db.auth.signOut();
+
+    if (error) {
+      alert("Logout မအောင်မြင်ပါ။ " + error.message);
+      return;
+    }
+
+    window.location.href = "admin.html";
+  });
+}
+
+// =========================================
+// START DASHBOARD
+// =========================================
 
 async function startDashboard() {
-  const allowed = await checkAdmin();
-  if (!allowed) return;
+  const isAdmin = await checkAdmin();
+
+  if (!isAdmin) return;
 
   createCategoryUI();
-  setupProductForm();
-  setupProductActions();
-  setupLogout();
+  createProductCategorySelect();
 
   await loadCategories();
+  await loadAdminProducts();
 }
 
 startDashboard();
