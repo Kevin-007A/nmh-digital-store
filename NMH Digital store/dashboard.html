@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#155eef">
-  <title>NMH - Digital Store | Admin</title>
+  <meta name="theme-color" content="#0b1530">
+  <title>K7 Digital Store | Admin Dashboard</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,24 +14,32 @@
   <style>
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     :root {
-      --primary: #155eef;
-      --primary-dark: #1249c7;
-      --bg: #f5f7fb;
-      --text: #172b4d;
-      --muted: #718096;
-      --border: #e8edf5;
-      --white: #ffffff;
-      --shadow: 0 8px 30px rgba(16, 40, 90, .06);
+      --blue: #287cff;
+      --blue-dark: #1262df;
+      --cyan: #00c6ff;
+      --bg: #0b1530;
+      --surface: #111f3d;
+      --surface-light: #17294c;
+      --text: #f4f7ff;
+      --muted: #9aabc9;
+      --border: rgba(255,255,255,.09);
+      --green: #20d69b;
+      --red: #ff646e;
     }
 
     body {
-      margin: 0;
-      background: var(--bg);
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 10% 5%, rgba(40,124,255,.15), transparent 30%),
+        radial-gradient(circle at 90% 90%, rgba(0,198,255,.09), transparent 30%),
+        var(--bg);
       color: var(--text);
-      font-family: 'Inter', 'Noto Sans Myanmar', sans-serif;
+      font-family: "Inter", "Noto Sans Myanmar", sans-serif;
     }
 
     button, input, textarea, select {
@@ -42,69 +50,86 @@
       cursor: pointer;
     }
 
+    /* HEADER */
+
     .admin-header {
-      min-height: 76px;
-      padding: 14px 5%;
-      background: linear-gradient(110deg, #155eef, #3478f6);
-      color: white;
+      min-height: 82px;
+      padding: 13px 5%;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 15px;
-      box-shadow: 0 5px 20px rgba(21, 94, 239, .18);
+      background: rgba(17,31,61,.85);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(18px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 13px;
+      min-width: 0;
     }
 
     .brand-icon {
-      width: 43px;
-      height: 43px;
-      display: grid;
-      place-items: center;
-      background: rgba(255,255,255,.18);
-      border: 1px solid rgba(255,255,255,.25);
-      border-radius: 13px;
-      font-size: 21px;
-      font-weight: 800;
+      width: 53px;
+      height: 53px;
+      flex-shrink: 0;
+      overflow: hidden;
+      border-radius: 15px;
+      background: #fff;
+      border: 1px solid rgba(255,255,255,.2);
+      box-shadow: 0 5px 22px rgba(40,124,255,.25);
+    }
+
+    .brand-icon img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
     }
 
     .brand h2 {
-      margin: 0;
-      font-size: 19px;
+      font-size: 18px;
       font-weight: 800;
+      letter-spacing: -.4px;
     }
 
     .brand small {
       display: block;
-      margin-top: 3px;
-      opacity: .8;
-      font-size: 11px;
-      letter-spacing: 1px;
+      margin-top: 5px;
+      color: #8fa8d2;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
     }
 
     #logoutBtn {
-      background: rgba(255,255,255,.15);
-      border: 1px solid rgba(255,255,255,.3);
-      color: white;
-      padding: 10px 17px;
-      border-radius: 9px;
+      padding: 11px 17px;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 11px;
+      background: rgba(255,255,255,.07);
+      color: #fff;
       font-weight: 700;
+      font-size: 13px;
       transition: .2s;
     }
 
     #logoutBtn:hover {
-      background: white;
-      color: var(--primary);
+      background: #fff;
+      color: var(--blue-dark);
     }
 
+    /* MAIN */
+
     .admin-container {
-      max-width: 1180px;
+      width: 100%;
+      max-width: 1200px;
       margin: 38px auto;
-      padding: 0 22px 50px;
+      padding: 0 22px 60px;
     }
 
     .page-heading {
@@ -112,11 +137,10 @@
       justify-content: space-between;
       align-items: flex-end;
       gap: 15px;
-      margin-bottom: 25px;
+      margin-bottom: 27px;
     }
 
     .page-heading h1 {
-      margin: 0;
       font-size: 29px;
       font-weight: 800;
       letter-spacing: -.7px;
@@ -124,66 +148,71 @@
 
     .welcome-text {
       color: var(--muted);
-      margin: 8px 0 0;
-      font-size: 14px;
+      margin-top: 9px;
+      font-size: 13px;
+      line-height: 1.8;
     }
+
+    /* STATS */
 
     .admin-stats {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 18px;
-      margin-bottom: 28px;
+      margin-bottom: 27px;
     }
 
     .admin-card {
       position: relative;
       overflow: hidden;
-      padding: 23px;
-      min-height: 145px;
-      border-radius: 17px;
-      background: linear-gradient(125deg, #155eef, #4387ff);
-      color: white;
-      box-shadow: 0 10px 25px rgba(21,94,239,.17);
+      min-height: 155px;
+      padding: 25px;
+      border-radius: 19px;
+      background: linear-gradient(125deg, #1765e8, #287cff 65%, #00aaff);
+      border: 1px solid rgba(255,255,255,.15);
+      box-shadow: 0 12px 35px rgba(20,99,230,.2);
     }
 
     .admin-card::after {
       content: "";
       position: absolute;
-      width: 140px;
-      height: 140px;
-      right: -35px;
-      top: -45px;
+      width: 170px;
+      height: 170px;
+      right: -55px;
+      top: -65px;
       border-radius: 50%;
       background: rgba(255,255,255,.12);
     }
 
     .admin-card h3 {
-      margin: 0;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       opacity: .9;
     }
 
     .admin-card p {
-      margin: 15px 0 0;
-      font-size: 37px;
+      margin-top: 16px;
+      font-size: 39px;
       font-weight: 800;
     }
 
     .stat-icon {
       position: absolute;
-      right: 22px;
-      bottom: 22px;
-      font-size: 34px;
-      opacity: .85;
+      right: 25px;
+      bottom: 23px;
+      font-size: 37px;
+      opacity: .8;
     }
 
+    /* PRODUCT MANAGEMENT */
+
     .admin-products {
-      background: white;
-      padding: 25px;
+      padding: 26px;
       border: 1px solid var(--border);
-      border-radius: 17px;
-      box-shadow: var(--shadow);
+      border-radius: 20px;
+      background: rgba(17,31,61,.88);
+      box-shadow: 0 18px 55px rgba(0,0,0,.18);
+      backdrop-filter: blur(15px);
     }
 
     .admin-title {
@@ -191,49 +220,52 @@
       justify-content: space-between;
       align-items: center;
       gap: 15px;
-      margin-bottom: 23px;
+      margin-bottom: 24px;
     }
 
     .admin-title h2 {
-      margin: 0;
       font-size: 20px;
       font-weight: 800;
     }
 
     .admin-title p {
-      margin: 6px 0 0;
+      margin-top: 7px;
       color: var(--muted);
-      font-size: 13px;
+      font-size: 12px;
+      line-height: 1.7;
     }
 
     #addProductBtn,
     #saveProductBtn {
       border: none;
-      background: var(--primary);
+      padding: 13px 19px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, #287cff, #0870ed);
       color: white;
-      padding: 12px 18px;
-      border-radius: 9px;
+      font-size: 13px;
       font-weight: 700;
+      box-shadow: 0 7px 20px rgba(40,124,255,.2);
       transition: .2s;
-      box-shadow: 0 5px 13px rgba(21,94,239,.15);
     }
 
     #addProductBtn:hover,
     #saveProductBtn:hover {
-      background: var(--primary-dark);
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(40,124,255,.35);
     }
 
+    /* PRODUCT FORM */
+
     #productForm {
-      background: #f8faff;
-      border: 1px solid #e2eaf8;
+      background: rgba(255,255,255,.035);
+      border: 1px solid var(--border);
       padding: 23px;
-      border-radius: 14px;
+      border-radius: 16px;
       margin-bottom: 26px;
     }
 
     #productForm h3 {
-      margin: 0 0 20px;
+      margin-bottom: 20px;
       font-size: 18px;
     }
 
@@ -246,41 +278,53 @@
     #saveProductForm textarea,
     #saveProductForm select {
       width: 100%;
-      padding: 13px 14px;
-      border: 1px solid #dce4f0;
-      border-radius: 9px;
-      font-size: 14px;
+      padding: 14px 15px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 11px;
+      background: #0d1a34;
+      color: white;
+      font-size: 13px;
       outline: none;
-      background: white;
       transition: .2s;
+    }
+
+    #saveProductForm input::placeholder,
+    #saveProductForm textarea::placeholder {
+      color: #7184a5;
     }
 
     #saveProductForm input:focus,
     #saveProductForm textarea:focus,
     #saveProductForm select:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(21,94,239,.09);
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(40,124,255,.12);
+    }
+
+    #saveProductForm select option {
+      background: #0d1a34;
+      color: white;
     }
 
     #saveProductForm textarea {
-      min-height: 95px;
+      min-height: 100px;
       resize: vertical;
     }
 
     #productImageFile {
       width: 100%;
-      padding: 12px;
-      background: white;
-      border: 1px dashed #aabbd6;
-      border-radius: 9px;
-      font-size: 13px;
+      padding: 13px;
+      background: #0d1a34;
+      border: 1px dashed rgba(40,124,255,.6);
+      border-radius: 11px;
+      color: #dce6f8;
+      font-size: 12px;
     }
 
     .image-help {
       color: var(--muted);
-      font-size: 12px;
-      margin: -5px 0 0;
-      line-height: 1.7;
+      font-size: 11px;
+      margin-top: -5px;
+      line-height: 1.8;
     }
 
     .image-preview-box {
@@ -294,7 +338,7 @@
       max-height: 190px;
       object-fit: contain;
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 13px;
       background: white;
       padding: 6px;
     }
@@ -302,10 +346,11 @@
     #saveProductForm label {
       font-size: 13px;
       font-weight: 600;
+      color: #dce6f8;
     }
 
     #productActive {
-      accent-color: var(--primary);
+      accent-color: var(--blue);
       width: 16px;
       height: 16px;
       vertical-align: middle;
@@ -318,22 +363,27 @@
     }
 
     #cancelProductBtn {
-      background: #e9eef6;
-      color: #475569;
-      border: none;
       padding: 12px 18px;
-      border-radius: 9px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      background: rgba(255,255,255,.07);
+      color: white;
       font-weight: 700;
+      font-size: 13px;
     }
 
     #cancelProductBtn:hover {
-      background: #dce4f0;
+      background: rgba(255,255,255,.13);
     }
 
     #formMessage {
       margin: 0;
       font-size: 13px;
+      color: var(--cyan);
+      line-height: 1.7;
     }
+
+    /* PRODUCT LIST */
 
     #adminProductList {
       display: grid;
@@ -347,25 +397,28 @@
       gap: 15px;
       padding: 17px;
       border: 1px solid var(--border);
-      border-radius: 12px;
-      background: white;
+      border-radius: 14px;
+      background: rgba(255,255,255,.035);
       transition: .2s;
     }
 
     .admin-product-row:hover {
-      border-color: #c7d8fa;
-      box-shadow: 0 5px 17px rgba(16,40,90,.05);
+      border-color: rgba(40,124,255,.45);
+      background: rgba(40,124,255,.06);
+      transform: translateY(-1px);
     }
 
     .admin-product-row h3 {
       margin: 0;
-      font-size: 15px;
+      color: #f3f7ff;
+      font-size: 14px;
     }
 
     .admin-product-row p {
       color: var(--muted);
-      margin: 6px 0;
-      font-size: 13px;
+      margin: 7px 0;
+      font-size: 12px;
+      line-height: 1.7;
     }
 
     .product-actions {
@@ -377,57 +430,81 @@
     .delete-btn {
       border: none;
       padding: 9px 12px;
-      border-radius: 7px;
+      border-radius: 8px;
       font-size: 12px;
       font-weight: 700;
       transition: .2s;
     }
 
     .edit-btn {
-      background: #e9f1ff;
-      color: #155eef;
+      background: rgba(40,124,255,.15);
+      color: #68a4ff;
     }
 
     .edit-btn:hover {
-      background: #d7e6ff;
+      background: rgba(40,124,255,.28);
     }
 
     .delete-btn {
-      background: #fff0f0;
-      color: #dc2626;
+      background: rgba(255,100,110,.12);
+      color: #ff777f;
     }
 
     .delete-btn:hover {
-      background: #ffe0e0;
+      background: rgba(255,100,110,.25);
     }
 
     .active-status {
-      color: #15945b;
+      color: #36e0a5;
       font-weight: 700;
-      font-size: 12px;
-      background: #e8f8ef;
-      padding: 6px 10px;
+      font-size: 11px;
+      background: rgba(32,214,155,.12);
+      padding: 7px 11px;
       border-radius: 20px;
       white-space: nowrap;
     }
 
     .inactive-status {
-      color: #dc2626;
+      color: #ff7b83;
       font-weight: 700;
-      font-size: 12px;
-      background: #fff0f0;
-      padding: 6px 10px;
+      font-size: 11px;
+      background: rgba(255,100,110,.12);
+      padding: 7px 11px;
       border-radius: 20px;
       white-space: nowrap;
     }
 
+    /* GENERAL INPUTS FOR DYNAMIC CATEGORY UI */
+
+    input, select, textarea {
+      color-scheme: dark;
+    }
+
+    /* MOBILE */
+
     @media (max-width: 700px) {
       .admin-header {
-        padding: 13px 16px;
+        padding: 12px 15px;
+        min-height: 72px;
+      }
+
+      .brand-icon {
+        width: 45px;
+        height: 45px;
+        border-radius: 12px;
       }
 
       .brand h2 {
-        font-size: 15px;
+        font-size: 14px;
+      }
+
+      .brand small {
+        font-size: 9px;
+      }
+
+      #logoutBtn {
+        padding: 10px 12px;
+        font-size: 11px;
       }
 
       .admin-container {
@@ -479,6 +556,10 @@
       .form-actions button {
         flex: 1;
       }
+
+      .admin-product-row {
+        padding: 13px;
+      }
     }
   </style>
 </head>
@@ -487,9 +568,12 @@
 
   <header class="admin-header">
     <div class="brand">
-      <div class="brand-icon">N</div>
+      <div class="brand-icon">
+        <img src="k7-logo.png" alt="K7 Logo">
+      </div>
+
       <div>
-        <h2>NMH - Digital Store</h2>
+        <h2>K7 Digital Store</h2>
         <small>ADMIN DASHBOARD</small>
       </div>
     </div>
@@ -502,7 +586,9 @@
     <div class="page-heading">
       <div>
         <h1>Dashboard</h1>
-        <p class="welcome-text">Welcome back! Manage your digital products.</p>
+        <p class="welcome-text">
+          Welcome back! Manage your digital products.
+        </p>
       </div>
     </div>
 
