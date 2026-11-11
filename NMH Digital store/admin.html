@@ -21,17 +21,18 @@
 
     body {
       min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
       font-family: "Inter", "Noto Sans Myanmar", sans-serif;
       background:
-        radial-gradient(circle at 15% 20%, rgba(29, 107, 255, .25), transparent 35%),
-        radial-gradient(circle at 85% 80%, rgba(0, 194, 255, .15), transparent 35%),
+        radial-gradient(circle at 15% 20%, rgba(29,107,255,.25), transparent 35%),
+        radial-gradient(circle at 85% 80%, rgba(0,194,255,.15), transparent 35%),
         #0b1530;
       color: #fff;
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
     .background-circle {
@@ -44,7 +45,7 @@
     .circle-one {
       width: 260px;
       height: 260px;
-      background: rgba(28, 104, 255, .12);
+      background: rgba(28,104,255,.12);
       top: -80px;
       right: -60px;
     }
@@ -52,7 +53,7 @@
     .circle-two {
       width: 220px;
       height: 220px;
-      background: rgba(0, 190, 255, .10);
+      background: rgba(0,190,255,.10);
       bottom: -80px;
       left: -50px;
     }
@@ -68,26 +69,33 @@
       width: 100%;
       padding: 38px 32px;
       border-radius: 24px;
-      background: rgba(255, 255, 255, .075);
-      border: 1px solid rgba(255, 255, 255, .12);
+      background: rgba(255,255,255,.075);
+      border: 1px solid rgba(255,255,255,.12);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      box-shadow: 0 25px 80px rgba(0, 0, 0, .35);
+      box-shadow: 0 25px 80px rgba(0,0,0,.35);
     }
 
+    /* K7 Logo */
     .logo {
-      width: 68px;
-      height: 68px;
-      margin: 0 auto 20px;
+      width: 112px;
+      height: 112px;
+      margin: 0 auto 22px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 20px;
-      background: linear-gradient(135deg, #287cff, #00c6ff);
-      box-shadow: 0 10px 30px rgba(0, 120, 255, .3);
-      font-size: 25px;
-      font-weight: 800;
-      letter-spacing: -1px;
+      border-radius: 25px;
+      overflow: hidden;
+      background: #fff;
+      border: 2px solid rgba(255,255,255,.25);
+      box-shadow: 0 10px 35px rgba(0,120,255,.3);
+    }
+
+    .logo img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
     }
 
     .admin-login h2 {
@@ -102,7 +110,7 @@
       text-align: center;
       color: #aab8d3;
       font-size: 13px;
-      line-height: 1.8;
+      line-height: 1.9;
       margin-bottom: 30px;
     }
 
@@ -124,8 +132,8 @@
       padding: 0 16px;
       border-radius: 12px;
       outline: none;
-      border: 1px solid rgba(255, 255, 255, .13);
-      background: rgba(255, 255, 255, .07);
+      border: 1px solid rgba(255,255,255,.13);
+      background: rgba(255,255,255,.07);
       color: #fff;
       font-family: inherit;
       font-size: 14px;
@@ -138,8 +146,8 @@
 
     .input-group input:focus {
       border-color: #398bff;
-      background: rgba(255, 255, 255, .10);
-      box-shadow: 0 0 0 3px rgba(57, 139, 255, .13);
+      background: rgba(255,255,255,.10);
+      box-shadow: 0 0 0 3px rgba(57,139,255,.13);
     }
 
     .login-button {
@@ -148,23 +156,29 @@
       margin-top: 8px;
       border: none;
       border-radius: 12px;
-      background: linear-gradient(135deg, #287cff, #0870ed);
+      background: linear-gradient(135deg,#287cff,#0870ed);
       color: #fff;
       font-size: 15px;
       font-weight: 700;
       font-family: inherit;
       cursor: pointer;
       transition: .25s;
-      box-shadow: 0 8px 25px rgba(27, 111, 255, .25);
+      box-shadow: 0 8px 25px rgba(27,111,255,.25);
     }
 
     .login-button:hover {
       transform: translateY(-2px);
-      box-shadow: 0 12px 30px rgba(27, 111, 255, .4);
+      box-shadow: 0 12px 30px rgba(27,111,255,.4);
     }
 
     .login-button:active {
       transform: scale(.98);
+    }
+
+    .login-button:disabled {
+      opacity: .65;
+      cursor: not-allowed;
+      transform: none;
     }
 
     #message {
@@ -174,6 +188,7 @@
       font-size: 13px;
       color: #ff7777;
       line-height: 1.6;
+      overflow-wrap: anywhere;
     }
 
     .security-note {
@@ -191,7 +206,7 @@
       height: 7px;
       border-radius: 50%;
       background: #20d69b;
-      box-shadow: 0 0 10px rgba(32, 214, 155, .6);
+      box-shadow: 0 0 10px rgba(32,214,155,.6);
     }
 
     .footer {
@@ -212,8 +227,8 @@
       }
 
       .logo {
-        width: 62px;
-        height: 62px;
+        width: 100px;
+        height: 100px;
       }
     }
   </style>
@@ -228,7 +243,9 @@
 
     <div class="admin-login">
 
-      <div class="logo">K7</div>
+      <div class="logo">
+        <img src="k7-logo.png" alt="K7 Digital Store Logo">
+      </div>
 
       <h2>K7 Digital Store</h2>
 
