@@ -8,514 +8,1402 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Myanmar:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Myanmar:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
 
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     :root {
       --blue: #287cff;
       --blue-dark: #1262df;
       --cyan: #00c6ff;
+
       --bg: #0b1530;
       --surface: #111f3d;
       --surface-light: #17294c;
+
       --text: #f4f7ff;
       --muted: #9aabc9;
+
       --border: rgba(255,255,255,.09);
+
       --green: #20d69b;
       --red: #ff646e;
     }
 
     body {
       min-height: 100vh;
+
       background:
-        radial-gradient(circle at 10% 5%, rgba(40,124,255,.15), transparent 30%),
-        radial-gradient(circle at 90% 90%, rgba(0,198,255,.09), transparent 30%),
+        radial-gradient(
+          circle at 10% 5%,
+          rgba(40,124,255,.15),
+          transparent 30%
+        ),
+        radial-gradient(
+          circle at 90% 90%,
+          rgba(0,198,255,.09),
+          transparent 30%
+        ),
         var(--bg);
+
       color: var(--text);
-      font-family: "Inter", "Noto Sans Myanmar", sans-serif;
+
+      font-family:
+        "Inter",
+        "Noto Sans Myanmar",
+        sans-serif;
     }
 
-    button, input, textarea, select { font: inherit; }
-    button { cursor: pointer; }
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    /* ==========================================
+       HEADER
+    ========================================== */
 
     .admin-header {
       min-height: 82px;
+
       padding: 13px 5%;
+
       display: flex;
       align-items: center;
       justify-content: space-between;
+
       gap: 15px;
-      background: rgba(17,31,61,.85);
-      border-bottom: 1px solid var(--border);
-      backdrop-filter: blur(18px);
+
+      background:
+        rgba(17,31,61,.85);
+
+      border-bottom:
+        1px solid var(--border);
+
+      backdrop-filter:
+        blur(18px);
+
       position: sticky;
       top: 0;
+
       z-index: 20;
     }
 
-    .brand { display: flex; align-items: center; gap: 13px; min-width: 0; }
+    .brand {
+      display: flex;
+      align-items: center;
+
+      gap: 13px;
+
+      min-width: 0;
+    }
 
     .brand-icon {
       width: 53px;
       height: 53px;
+
       flex-shrink: 0;
+
       overflow: hidden;
+
       border-radius: 15px;
+
       background: #fff;
-      border: 1px solid rgba(255,255,255,.2);
-      box-shadow: 0 5px 22px rgba(40,124,255,.25);
+
+      border:
+        1px solid rgba(255,255,255,.2);
+
+      box-shadow:
+        0 5px 22px rgba(40,124,255,.25);
     }
 
     .brand-icon img {
       width: 100%;
       height: 100%;
+
       display: block;
+
       object-fit: contain;
     }
 
-    .brand h2 { font-size: 18px; font-weight: 800; letter-spacing: -.4px; }
+    .brand h2 {
+      font-size: 18px;
+      font-weight: 800;
+
+      letter-spacing: -.4px;
+    }
+
     .brand small {
       display: block;
+
       margin-top: 5px;
+
       color: #8fa8d2;
+
       font-size: 10px;
+
       font-weight: 700;
+
       letter-spacing: 1.5px;
     }
 
     #logoutBtn {
       padding: 11px 17px;
-      border: 1px solid rgba(255,255,255,.15);
+
+      border:
+        1px solid rgba(255,255,255,.15);
+
       border-radius: 11px;
-      background: rgba(255,255,255,.07);
+
+      background:
+        rgba(255,255,255,.07);
+
       color: #fff;
+
       font-weight: 700;
+
       font-size: 13px;
+
       transition: .2s;
     }
-    #logoutBtn:hover { background: #fff; color: var(--blue-dark); }
+
+    #logoutBtn:hover {
+      background: #fff;
+      color: var(--blue-dark);
+    }
+
+
+    /* ==========================================
+       MAIN
+    ========================================== */
 
     .admin-container {
       width: 100%;
+
       max-width: 1200px;
+
       margin: 38px auto;
-      padding: 0 22px 60px;
+
+      padding:
+        0 22px 60px;
     }
+
+
+    /* ==========================================
+       PAGE HEADING
+    ========================================== */
 
     .page-heading {
       display: flex;
+
       justify-content: space-between;
+
       align-items: flex-end;
+
       gap: 15px;
+
       margin-bottom: 27px;
     }
 
-    .page-heading h1 { font-size: 29px; font-weight: 800; letter-spacing: -.7px; }
-    .welcome-text { color: var(--muted); margin-top: 9px; font-size: 13px; line-height: 1.8; }
+    .page-heading h1 {
+      font-size: 29px;
+
+      font-weight: 800;
+
+      letter-spacing: -.7px;
+    }
+
+    .welcome-text {
+      color: var(--muted);
+
+      margin-top: 9px;
+
+      font-size: 13px;
+
+      line-height: 1.8;
+    }
+
+
+    /* ==========================================
+       STATS
+    ========================================== */
 
     .admin-stats {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+
+      grid-template-columns:
+        repeat(
+          auto-fit,
+          minmax(220px, 1fr)
+        );
+
       gap: 18px;
+
       margin-bottom: 27px;
     }
 
     .admin-card {
       position: relative;
+
       overflow: hidden;
+
       min-height: 155px;
+
       padding: 25px;
+
       border-radius: 19px;
-      background: linear-gradient(125deg, #1765e8, #287cff 65%, #00aaff);
-      border: 1px solid rgba(255,255,255,.15);
-      box-shadow: 0 12px 35px rgba(20,99,230,.2);
+
+      background:
+        linear-gradient(
+          125deg,
+          #1765e8,
+          #287cff 65%,
+          #00aaff
+        );
+
+      border:
+        1px solid rgba(255,255,255,.15);
+
+      box-shadow:
+        0 12px 35px
+        rgba(20,99,230,.2);
     }
 
     .admin-card::after {
       content: "";
+
       position: absolute;
+
       width: 170px;
       height: 170px;
+
       right: -55px;
       top: -65px;
+
       border-radius: 50%;
-      background: rgba(255,255,255,.12);
+
+      background:
+        rgba(255,255,255,.12);
     }
 
-    .admin-card h3 { font-size: 13px; font-weight: 600; opacity: .9; }
-    .admin-card p { margin-top: 16px; font-size: 39px; font-weight: 800; }
-    .stat-icon { position: absolute; right: 25px; bottom: 23px; font-size: 37px; opacity: .8; }
+    .admin-card h3 {
+      font-size: 13px;
+
+      font-weight: 600;
+
+      opacity: .9;
+    }
+
+    .admin-card p {
+      margin-top: 16px;
+
+      font-size: 39px;
+
+      font-weight: 800;
+    }
+
+    .stat-icon {
+      position: absolute;
+
+      right: 25px;
+      bottom: 23px;
+
+      font-size: 37px;
+
+      opacity: .8;
+    }
+
+
+    /* ==========================================
+       PRODUCT SECTION
+    ========================================== */
 
     .admin-products {
       padding: 26px;
-      border: 1px solid var(--border);
+
+      border:
+        1px solid var(--border);
+
       border-radius: 20px;
-      background: rgba(17,31,61,.88);
-      box-shadow: 0 18px 55px rgba(0,0,0,.18);
-      backdrop-filter: blur(15px);
+
+      background:
+        rgba(17,31,61,.88);
+
+      box-shadow:
+        0 18px 55px
+        rgba(0,0,0,.18);
+
+      backdrop-filter:
+        blur(15px);
     }
 
     .admin-title {
       display: flex;
+
       justify-content: space-between;
+
       align-items: center;
+
       gap: 15px;
+
       margin-bottom: 24px;
     }
 
-    .admin-title h2 { font-size: 20px; font-weight: 800; }
-    .admin-title p { margin-top: 7px; color: var(--muted); font-size: 12px; line-height: 1.7; }
+    .admin-title h2 {
+      font-size: 20px;
 
-    #addProductBtn, #saveProductBtn {
+      font-weight: 800;
+    }
+
+    .admin-title p {
+      margin-top: 7px;
+
+      color: var(--muted);
+
+      font-size: 12px;
+
+      line-height: 1.7;
+    }
+
+
+    /* ==========================================
+       ADD PRODUCT BUTTON
+    ========================================== */
+
+    #addProductBtn,
+    #saveProductBtn {
       border: none;
+
       padding: 13px 19px;
+
       border-radius: 11px;
-      background: linear-gradient(135deg, #287cff, #0870ed);
+
+      background:
+        linear-gradient(
+          135deg,
+          #287cff,
+          #0870ed
+        );
+
       color: white;
+
       font-size: 13px;
+
       font-weight: 700;
-      box-shadow: 0 7px 20px rgba(40,124,255,.2);
+
+      box-shadow:
+        0 7px 20px
+        rgba(40,124,255,.2);
+
       transition: .2s;
     }
 
-    #addProductBtn:hover, #saveProductBtn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(40,124,255,.35);
+    #addProductBtn:hover,
+    #saveProductBtn:hover {
+      transform:
+        translateY(-2px);
+
+      box-shadow:
+        0 10px 25px
+        rgba(40,124,255,.35);
     }
 
+
+    /* ==========================================
+       PRODUCT FORM
+    ========================================== */
+
     #productForm {
-      background: rgba(255,255,255,.035);
-      border: 1px solid var(--border);
+      background:
+        rgba(255,255,255,.035);
+
+      border:
+        1px solid var(--border);
+
       padding: 23px;
+
       border-radius: 16px;
+
       margin-bottom: 26px;
     }
 
-    #productForm h3 { margin-bottom: 20px; font-size: 18px; }
+    #productForm h3 {
+      margin-bottom: 20px;
 
-    #saveProductForm { display: grid; gap: 14px; }
+      font-size: 18px;
+    }
 
-    #saveProductForm input:not([type="checkbox"]):not([type="file"]),
+    #saveProductForm {
+      display: grid;
+
+      gap: 14px;
+    }
+
+    #saveProductForm
+    input:not([type="checkbox"]):not([type="file"]),
     #saveProductForm textarea,
     #saveProductForm select {
+
       width: 100%;
+
       padding: 14px 15px;
-      border: 1px solid rgba(255,255,255,.12);
+
+      border:
+        1px solid rgba(255,255,255,.12);
+
       border-radius: 11px;
+
       background: #0d1a34;
+
       color: white;
+
       font-size: 13px;
+
       outline: none;
+
       transition: .2s;
     }
 
     #saveProductForm input::placeholder,
-    #saveProductForm textarea::placeholder { color: #7184a5; }
+    #saveProductForm textarea::placeholder {
+      color: #7184a5;
+    }
 
     #saveProductForm input:focus,
     #saveProductForm textarea:focus,
     #saveProductForm select:focus {
-      border-color: var(--blue);
-      box-shadow: 0 0 0 3px rgba(40,124,255,.12);
+
+      border-color:
+        var(--blue);
+
+      box-shadow:
+        0 0 0 3px
+        rgba(40,124,255,.12);
     }
 
-    #saveProductForm select option { background: #0d1a34; color: white; }
-    #saveProductForm textarea { min-height: 100px; resize: vertical; }
+    #saveProductForm
+    select option {
+
+      background: #0d1a34;
+
+      color: white;
+    }
+
+    #saveProductForm textarea {
+
+      min-height: 100px;
+
+      resize: vertical;
+    }
 
     #productImageFile {
+
       width: 100%;
+
       padding: 13px;
+
       background: #0d1a34;
-      border: 1px dashed rgba(40,124,255,.6);
+
+      border:
+        1px dashed
+        rgba(40,124,255,.6);
+
       border-radius: 11px;
+
       color: #dce6f8;
+
       font-size: 12px;
     }
 
-    .image-help { color: var(--muted); font-size: 11px; margin-top: -5px; line-height: 1.8; }
-    .image-preview-box { display: none; margin-top: 5px; }
+    .image-help {
+
+      color: var(--muted);
+
+      font-size: 11px;
+
+      margin-top: -5px;
+
+      line-height: 1.8;
+    }
+
+    .image-preview-box {
+
+      display: none;
+
+      margin-top: 5px;
+    }
 
     #imagePreview {
+
       display: block;
+
       max-width: 190px;
+
       max-height: 190px;
+
       object-fit: contain;
-      border: 1px solid var(--border);
+
+      border:
+        1px solid var(--border);
+
       border-radius: 13px;
+
       background: white;
+
       padding: 6px;
     }
 
-    #saveProductForm label { font-size: 13px; font-weight: 600; color: #dce6f8; }
-    #productActive { accent-color: var(--blue); width: 16px; height: 16px; vertical-align: middle; }
-    .form-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    #saveProductForm label {
+
+      font-size: 13px;
+
+      font-weight: 600;
+
+      color: #dce6f8;
+    }
+
+    #productActive {
+
+      accent-color:
+        var(--blue);
+
+      width: 16px;
+
+      height: 16px;
+
+      vertical-align: middle;
+    }
+
+    .form-actions {
+
+      display: flex;
+
+      gap: 10px;
+
+      flex-wrap: wrap;
+    }
 
     #cancelProductBtn {
+
       padding: 12px 18px;
-      border: 1px solid var(--border);
+
+      border:
+        1px solid var(--border);
+
       border-radius: 11px;
-      background: rgba(255,255,255,.07);
+
+      background:
+        rgba(255,255,255,.07);
+
       color: white;
+
       font-weight: 700;
+
       font-size: 13px;
     }
-    #cancelProductBtn:hover { background: rgba(255,255,255,.13); }
 
-    #formMessage { margin: 0; font-size: 13px; color: var(--cyan); line-height: 1.7; }
-    #adminProductList { display: grid; gap: 12px; }
+    #cancelProductBtn:hover {
+
+      background:
+        rgba(255,255,255,.13);
+    }
+
+    #formMessage {
+
+      margin: 0;
+
+      font-size: 13px;
+
+      color: var(--cyan);
+
+      line-height: 1.7;
+    }
+
+
+    /* ==========================================
+       PRODUCT LIST
+    ========================================== */
+
+    #adminProductList {
+
+      display: grid;
+
+      gap: 12px;
+    }
 
     .admin-product-row {
+
       display: grid;
-      grid-template-columns: 1fr auto auto auto;
+
+      grid-template-columns:
+        1fr auto auto auto;
+
       align-items: center;
+
       gap: 15px;
+
       padding: 17px;
-      border: 1px solid var(--border);
+
+      border:
+        1px solid var(--border);
+
       border-radius: 14px;
-      background: rgba(255,255,255,.035);
+
+      background:
+        rgba(255,255,255,.035);
+
       transition: .2s;
     }
 
     .admin-product-row:hover {
-      border-color: rgba(40,124,255,.45);
-      background: rgba(40,124,255,.06);
-      transform: translateY(-1px);
+
+      border-color:
+        rgba(40,124,255,.45);
+
+      background:
+        rgba(40,124,255,.06);
+
+      transform:
+        translateY(-1px);
     }
 
-    .admin-product-row h3 { margin: 0; color: #f3f7ff; font-size: 14px; }
-    .admin-product-row p { color: var(--muted); margin: 7px 0; font-size: 12px; line-height: 1.7; }
-    .product-actions { display: flex; gap: 7px; }
+    .admin-product-row h3 {
 
-    .edit-btn, .delete-btn {
-      border: none;
-      padding: 9px 12px;
-      border-radius: 8px;
+      margin: 0;
+
+      color: #f3f7ff;
+
+      font-size: 14px;
+    }
+
+    .admin-product-row p {
+
+      color: var(--muted);
+
+      margin: 7px 0;
+
       font-size: 12px;
+
+      line-height: 1.7;
+    }
+
+    .product-actions {
+
+      display: flex;
+
+      gap: 7px;
+    }
+
+    .edit-btn,
+    .delete-btn {
+
+      border: none;
+
+      padding: 9px 12px;
+
+      border-radius: 8px;
+
+      font-size: 12px;
+
       font-weight: 700;
+
       transition: .2s;
     }
 
-    .edit-btn { background: rgba(40,124,255,.15); color: #68a4ff; }
-    .edit-btn:hover { background: rgba(40,124,255,.28); }
-    .delete-btn { background: rgba(255,100,110,.12); color: #ff777f; }
-    .delete-btn:hover { background: rgba(255,100,110,.25); }
+    .edit-btn {
+
+      background:
+        rgba(40,124,255,.15);
+
+      color: #68a4ff;
+    }
+
+    .edit-btn:hover {
+
+      background:
+        rgba(40,124,255,.28);
+    }
+
+    .delete-btn {
+
+      background:
+        rgba(255,100,110,.12);
+
+      color: #ff777f;
+    }
+
+    .delete-btn:hover {
+
+      background:
+        rgba(255,100,110,.25);
+    }
 
     .active-status {
+
       color: #36e0a5;
+
       font-weight: 700;
+
       font-size: 11px;
-      background: rgba(32,214,155,.12);
+
+      background:
+        rgba(32,214,155,.12);
+
       padding: 7px 11px;
+
       border-radius: 20px;
+
       white-space: nowrap;
     }
 
     .inactive-status {
+
       color: #ff7b83;
+
       font-weight: 700;
+
       font-size: 11px;
-      background: rgba(255,100,110,.12);
+
+      background:
+        rgba(255,100,110,.12);
+
       padding: 7px 11px;
+
       border-radius: 20px;
+
       white-space: nowrap;
     }
 
-    /* CATEGORY MANAGER - readable white panel inside dark dashboard.
-       dashboard.js injects this block dynamically; IDs below are preserved. */
+
+    /* ==========================================
+       CATEGORY MANAGER
+       IMPORTANT:
+       Do NOT force white background here.
+       dashboard.js controls the category design.
+    ========================================== */
 
     #categoryManager {
-      background: #ffffff !important;
-      color: #172b4d !important;
-      padding: 20px !important;
-      margin: 20px 0 !important;
-      border-radius: 16px !important;
-      border: 1px solid #e2e8f0 !important;
-      box-shadow: 0 10px 28px rgba(0,0,0,.13) !important;
+
+      width: 100%;
+
+      background:
+        linear-gradient(
+          135deg,
+          #1769e8 0%,
+          #1262df 55%,
+          #0b3d91 100%
+        );
+
+      color: #ffffff;
+
+      padding: 24px;
+
+      margin: 22px 0;
+
+      border-radius: 18px;
+
+      border:
+        1px solid
+        rgba(255,255,255,.22);
+
+      box-shadow:
+        0 12px 30px
+        rgba(23,105,232,.28);
+
+      position: relative;
+
+      overflow: hidden;
     }
 
-    #categoryManager h2,
-    #categoryManager h3,
-    #categoryManager h4,
-    #categoryManager strong,
-    #categoryManager label,
-    #categoryManager p,
-    #categoryManager span {
-      color: #172b4d !important;
-    }
+
+    /* Category title */
 
     #categoryManager h3 {
-      color: #1769e8 !important;
-      font-weight: 800 !important;
+
+      color: #ffffff;
+
+      font-weight: 900;
     }
 
-    #categoryManager input,
-    #categoryManager select {
-      background: #ffffff !important;
-      color: #172b4d !important;
-      border: 1px solid #d5deeb !important;
-      border-radius: 9px !important;
-      padding: 12px !important;
+
+    /* Category message */
+
+    #categoryManager #categoryMessage {
+
+      color: #ffffff;
+
+      font-weight: 800;
+    }
+
+
+    /* Category input */
+
+    #categoryManager #newCategoryName {
+
+      background: #ffffff;
+
+      color: #0b3d91;
+
+      border:
+        2px solid
+        rgba(255,255,255,.55);
+
+      border-radius: 11px;
+
+      font-weight: 700;
+
       outline: none;
     }
 
-    #categoryManager input::placeholder { color: #8793a5 !important; }
+    #categoryManager
+    #newCategoryName::placeholder {
 
-    #categoryManager input:focus,
-    #categoryManager select:focus {
-      border-color: #287cff !important;
-      box-shadow: 0 0 0 3px rgba(40,124,255,.12) !important;
+      color: #7184a5;
     }
 
-    #categoryManager #newCategoryName {
-      min-width: 180px;
-      flex: 1;
+    #categoryManager
+    #newCategoryName:focus {
+
+      border-color:
+        #ffffff;
+
+      box-shadow:
+        0 0 0 3px
+        rgba(255,255,255,.18);
     }
+
+
+    /* Add category button */
 
     #categoryManager #addCategoryBtn {
-      background: linear-gradient(135deg,#287cff,#0870ed) !important;
-      color: #ffffff !important;
-      border: 0 !important;
-      border-radius: 9px !important;
-      padding: 12px 17px !important;
-      font-weight: 700 !important;
+
+      background: #ffffff;
+
+      color: #1262df;
+
+      border: none;
+
+      border-radius: 11px;
+
+      font-weight: 900;
+
+      box-shadow:
+        0 5px 15px
+        rgba(0,0,0,.15);
     }
 
-    #categoryManager #categoryMessage {
-      color: #1769e8 !important;
-      font-size: 13px !important;
-      line-height: 1.7;
+    #categoryManager
+    #addCategoryBtn:hover {
+
+      transform:
+        translateY(-1px);
+
+      box-shadow:
+        0 7px 18px
+        rgba(0,0,0,.22);
     }
+
+
+    /* Category list */
 
     #categoryManager #categoryList {
-      color: #172b4d !important;
+
+      display: grid;
+
+      gap: 11px;
+
+      color: #ffffff;
     }
 
-    #categoryManager #categoryList > div {
-      background: #f8faff !important;
-      border: 1px solid #e2e8f0 !important;
-      border-radius: 10px !important;
-      margin-bottom: 9px;
+
+    /* Individual category */
+
+    #categoryManager
+    #categoryList > div {
+
+      background:
+        linear-gradient(
+          135deg,
+          #0b3d91 0%,
+          #0a347c 100%
+        );
+
+      border:
+        1px solid
+        rgba(255,255,255,.30);
+
+      border-radius: 12px;
+
+      box-shadow:
+        0 5px 14px
+        rgba(0,0,0,.16);
+
+      color: #ffffff;
     }
 
-    #categoryManager #categoryList strong {
-      color: #172b4d !important;
-      font-size: 14px !important;
-      font-weight: 700 !important;
+
+    /* Category name */
+
+    #categoryManager
+    #categoryList strong {
+
+      color: #ffffff;
+
+      font-size: 18px;
+
+      font-weight: 900;
+
+      text-shadow:
+        0 1px 2px
+        rgba(0,0,0,.25);
     }
 
-    #categoryManager #categoryList button {
-      border-radius: 8px !important;
-      padding: 8px 11px !important;
-      font-size: 12px !important;
-      font-weight: 700 !important;
+
+    /* Category buttons */
+
+    #categoryManager
+    #categoryList button {
+
+      border-radius: 9px;
+
+      font-size: 13px;
+
+      font-weight: 900;
+
+      transition: .15s;
     }
 
-    #categoryManager #categoryList button[data-action="up"],
-    #categoryManager #categoryList button[data-action="down"] {
-      background: #e8f1ff !important;
-      color: #1769e8 !important;
-      border: 1px solid #d5e5ff !important;
+
+    /* Up / Down */
+
+    #categoryManager
+    #categoryList
+    button[data-action="up"],
+
+    #categoryManager
+    #categoryList
+    button[data-action="down"] {
+
+      background:
+        rgba(255,255,255,.18);
+
+      color: #ffffff;
+
+      border:
+        1px solid
+        rgba(255,255,255,.35);
     }
 
-    #categoryManager #categoryList button[data-action="edit"] {
-      background: #e8f1ff !important;
-      color: #1769e8 !important;
-      border: 1px solid #d5e5ff !important;
+
+    /* Edit */
+
+    #categoryManager
+    #categoryList
+    button[data-action="edit"] {
+
+      background: #ffffff;
+
+      color: #1262df;
+
+      border: none;
+
+      box-shadow:
+        0 3px 8px
+        rgba(0,0,0,.12);
     }
 
-    #categoryManager #categoryList button[data-action="delete"] {
-      background: #fff0f0 !important;
-      color: #dc2626 !important;
-      border: 1px solid #ffdada !important;
+
+    /* Delete */
+
+    #categoryManager
+    #categoryList
+    button[data-action="delete"] {
+
+      background: #ffe8e8;
+
+      color: #b42318;
+
+      border: none;
     }
 
-    #categoryManager #categoryList button:hover { filter: brightness(.97); }
 
-    /* Dynamic product category dropdown */
+    /* Category hover */
+
+    #categoryManager
+    #categoryList
+    button:hover {
+
+      transform:
+        translateY(-1px);
+    }
+
+
+    /* ==========================================
+       PRODUCT CATEGORY DROPDOWN
+    ========================================== */
+
     #productCategory {
-      background: #0d1a34 !important;
-      color: #ffffff !important;
-      border: 1px solid rgba(255,255,255,.15) !important;
+
+      background:
+        #0d1a34 !important;
+
+      color:
+        #ffffff !important;
+
+      border:
+        1px solid
+        rgba(255,255,255,.15) !important;
+
+      border-radius:
+        11px !important;
     }
+
+    #productCategory option {
+
+      background:
+        #0d1a34;
+
+      color:
+        #ffffff;
+    }
+
+
+    /* ==========================================
+       MOBILE
+    ========================================== */
 
     @media (max-width: 700px) {
-      .admin-header { padding: 12px 15px; min-height: 72px; }
-      .brand-icon { width: 45px; height: 45px; border-radius: 12px; }
-      .brand h2 { font-size: 14px; }
-      .brand small { font-size: 9px; }
-      #logoutBtn { padding: 10px 12px; font-size: 11px; }
-      .admin-container { margin: 25px auto; padding: 0 13px 35px; }
-      .page-heading h1 { font-size: 24px; }
-      .admin-products { padding: 17px; }
-      .admin-title { align-items: flex-start; flex-direction: column; }
-      #addProductBtn { width: 100%; }
-      .admin-product-row { grid-template-columns: 1fr auto; gap: 10px; }
-      .product-actions { grid-column: 1 / -1; }
-      .admin-product-row .active-status,
-      .admin-product-row .inactive-status { justify-self: end; }
+
+      .admin-header {
+
+        padding:
+          12px 15px;
+
+        min-height: 72px;
+      }
+
+      .brand-icon {
+
+        width: 45px;
+
+        height: 45px;
+
+        border-radius: 12px;
+      }
+
+      .brand h2 {
+
+        font-size: 14px;
+      }
+
+      .brand small {
+
+        font-size: 9px;
+      }
+
+      #logoutBtn {
+
+        padding:
+          10px 12px;
+
+        font-size: 11px;
+      }
+
+      .admin-container {
+
+        margin:
+          25px auto;
+
+        padding:
+          0 13px 35px;
+      }
+
+      .page-heading h1 {
+
+        font-size: 24px;
+      }
+
+      .admin-products {
+
+        padding: 17px;
+      }
+
+      .admin-title {
+
+        align-items:
+          flex-start;
+
+        flex-direction:
+          column;
+      }
+
+      #addProductBtn {
+
+        width: 100%;
+      }
+
+      .admin-product-row {
+
+        grid-template-columns:
+          1fr auto;
+
+        gap: 10px;
+      }
+
+      .product-actions {
+
+        grid-column:
+          1 / -1;
+      }
+
+      .admin-product-row
+      .active-status,
+
+      .admin-product-row
+      .inactive-status {
+
+        justify-self:
+          end;
+      }
+
+
+      /* Category mobile */
+
+      #categoryManager {
+
+        padding:
+          18px;
+      }
+
+      #categoryManager
+      #newCategoryName {
+
+        min-width:
+          100% !important;
+
+        width:
+          100%;
+      }
+
+      #categoryManager
+      #addCategoryBtn {
+
+        width:
+          100%;
+      }
+
+      #categoryManager
+      #categoryList > div {
+
+        padding:
+          13px !important;
+      }
+
+      #categoryManager
+      #categoryList strong {
+
+        font-size:
+          16px !important;
+      }
     }
 
+
     @media (max-width: 420px) {
-      .admin-card p { font-size: 32px; }
-      #productForm { padding: 15px; }
-      .form-actions button { flex: 1; }
-      .admin-product-row { padding: 13px; }
-      #categoryManager { padding: 15px !important; }
-      #categoryManager #categoryList > div { gap: 7px !important; }
+
+      .admin-card p {
+
+        font-size: 32px;
+      }
+
+      #productForm {
+
+        padding: 15px;
+      }
+
+      .form-actions button {
+
+        flex: 1;
+      }
+
+      .admin-product-row {
+
+        padding: 13px;
+      }
+
+      #categoryManager {
+
+        padding: 15px;
+      }
+
+      #categoryManager
+      #categoryList > div {
+
+        gap: 7px !important;
+      }
+
+      #categoryManager
+      #categoryList strong {
+
+        font-size: 15px !important;
+      }
     }
+
   </style>
 </head>
 
 <body>
 
+  <!-- ========================================
+       HEADER
+  ========================================= -->
+
   <header class="admin-header">
+
     <div class="brand">
+
       <div class="brand-icon">
-        <img src="k7-logo.png" alt="K7 Digital Store Logo">
+
+        <img
+          src="k7-logo.png"
+          alt="K7 Digital Store Logo"
+        >
+
       </div>
+
       <div>
-        <h2>K7 Digital Store</h2>
-        <small>ADMIN DASHBOARD</small>
+
+        <h2>
+          K7 Digital Store
+        </h2>
+
+        <small>
+          ADMIN DASHBOARD
+        </small>
+
       </div>
+
     </div>
-    <button id="logoutBtn">Logout ↗</button>
+
+
+    <button id="logoutBtn">
+      Logout ↗
+    </button>
+
   </header>
+
+
+  <!-- ========================================
+       MAIN
+  ========================================= -->
 
   <main class="admin-container">
 
+    <!-- PAGE HEADING -->
+
     <div class="page-heading">
+
       <div>
-        <h1>Dashboard</h1>
-        <p class="welcome-text">Welcome back! Manage your digital products.</p>
+
+        <h1>
+          Dashboard
+        </h1>
+
+        <p class="welcome-text">
+          Welcome back! Manage your digital products.
+        </p>
+
       </div>
+
     </div>
 
+
+    <!-- ======================================
+         STATS
+    ======================================= -->
+
     <section class="admin-stats">
+
       <div class="admin-card">
-        <h3>Total Products</h3>
-        <p id="productCount">0</p>
-        <span class="stat-icon">📦</span>
+
+        <h3>
+          Total Products
+        </h3>
+
+        <p id="productCount">
+          0
+        </p>
+
+        <span class="stat-icon">
+          📦
+        </span>
+
       </div>
+
     </section>
+
+
+    <!-- ======================================
+         PRODUCT MANAGEMENT
+    ======================================= -->
 
     <section class="admin-products">
 
       <div class="admin-title">
+
         <div>
-          <h2>Product Management</h2>
-          <p>Add, edit and manage your store products.</p>
+
+          <h2>
+            Product Management
+          </h2>
+
+          <p>
+            Add, edit and manage your store products.
+          </p>
+
         </div>
-        <button id="addProductBtn">＋ Add Product</button>
+
+
+        <button id="addProductBtn">
+          ＋ Add Product
+        </button>
+
       </div>
 
-      <div id="productForm" style="display:none;">
 
-        <h3 id="formTitle">Add New Product</h3>
+      <!-- PRODUCT FORM -->
+
+      <div
+        id="productForm"
+        style="display:none;"
+      >
+
+        <h3 id="formTitle">
+          Add New Product
+        </h3>
+
 
         <form id="saveProductForm">
-          <input type="hidden" id="editProductId">
+
+          <input
+            type="hidden"
+            id="editProductId"
+          >
+
 
           <input
             type="text"
@@ -524,10 +1412,12 @@
             required
           >
 
+
           <textarea
             id="productDescription"
             placeholder="Product Description"
           ></textarea>
+
 
           <input
             type="number"
@@ -538,12 +1428,24 @@
             required
           >
 
+
           <select id="productType">
-            <option value="game">Game</option>
-            <option value="digital">Digital Service</option>
+
+            <option value="game">
+              Game
+            </option>
+
+            <option value="digital">
+              Digital Service
+            </option>
+
           </select>
 
-          <label for="productImageFile">Product Image Upload</label>
+
+          <label for="productImageFile">
+            Product Image Upload
+          </label>
+
 
           <input
             type="file"
@@ -551,14 +1453,31 @@
             accept="image/png,image/jpeg,image/webp"
           >
 
+
           <p class="image-help">
-            JPG, PNG, WEBP ပုံများသာ လက်ခံပါသည်။ အများဆုံး 5MB။
-            ပုံအသစ်မရွေးပါက ရှိပြီးသားပုံကို ဆက်သုံးပါမည်။
+
+            JPG, PNG, WEBP ပုံများသာ လက်ခံပါသည်။
+            အများဆုံး 5MB။
+
+            ပုံအသစ်မရွေးပါက
+            ရှိပြီးသားပုံကို ဆက်သုံးပါမည်။
+
           </p>
 
-          <div class="image-preview-box" id="imagePreviewBox">
-            <img id="imagePreview" src="" alt="Product image preview">
+
+          <div
+            class="image-preview-box"
+            id="imagePreviewBox"
+          >
+
+            <img
+              id="imagePreview"
+              src=""
+              alt="Product image preview"
+            >
+
           </div>
+
 
           <input
             type="url"
@@ -566,26 +1485,69 @@
             placeholder="သို့မဟုတ် Product Image URL ထည့်ပါ"
           >
 
+
           <label>
-            <input type="checkbox" id="productActive" checked>
+
+            <input
+              type="checkbox"
+              id="productActive"
+              checked
+            >
+
             Active
+
           </label>
 
+
           <div class="form-actions">
-            <button type="submit" id="saveProductBtn">Save Product</button>
-            <button type="button" id="cancelProductBtn">Cancel</button>
+
+            <button
+              type="submit"
+              id="saveProductBtn"
+            >
+              Save Product
+            </button>
+
+
+            <button
+              type="button"
+              id="cancelProductBtn"
+            >
+              Cancel
+            </button>
+
           </div>
 
-          <p id="formMessage" role="status"></p>
+
+          <p
+            id="formMessage"
+            role="status"
+          ></p>
+
         </form>
+
       </div>
 
-      <div id="adminProductList">Loading products...</div>
+
+      <!-- PRODUCT LIST -->
+
+      <div id="adminProductList">
+        Loading products...
+      </div>
 
     </section>
+
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- ========================================
+       SCRIPTS
+  ========================================= -->
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  ></script>
+
   <script src="dashboard.js"></script>
 
 </body>
