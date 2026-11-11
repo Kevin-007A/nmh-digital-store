@@ -1,12 +1,8 @@
 
 const SUPABASE_URL = "https://wdcrskelhwnrzmlucxoi.supabase.co";
-
 const SUPABASE_KEY = "sb_publishable_cecHLOKznBIQcu3YYEcPmA_ld8sPwJb";
 
-const db = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const productList = document.querySelector("#productList");
 const itemTotal = document.querySelector("#itemTotal");
@@ -18,6 +14,7 @@ const orderMessage = document.querySelector("#orderMessage");
 const submitOrder = document.querySelector("#submitOrder");
 
 let allProducts = [];
+let allCategories = [];
 let selectedProduct = null;
 let currentFilter = "all";
 
@@ -31,18 +28,58 @@ function escapeHTML(value) {
   })[char]);
 }
 
+function formatPrice(price) {
+  return "Ks" + Number(price || 0).toLocaleString("en-US");
+}
+
 function showToast(message) {
   const toast = document.querySelector("#toast");
   toast.textContent = message;
   toast.classList.add("show");
 
-  setTimeout(() => {
-    toast.classList.remove("show");
-  }, 3000);
+  setTimeout(() => toast.classList.remove("show"), 3000);
 }
 
-function formatPrice(price) {
-  return "Ks" + Number(price).toLocaleString();
+// LOAD CATEGORIES
+async function loadCategories() {
+  const { data, error } = await db
+    .from("categories")
+    .select("id,name,display_order")
+    .order("display_order", { ascending: true })
+    .order("id", { ascending: true });
+
+  if (error) {
+    console.error("Category error:", error);
+    filters.textContent = "Category များ ဖတ်မရပါ။";
+    return false;
+  }
+
+  allCategories = data || [];
+  renderFilters();
+
+  return true;
+}
+
+// RENDER CATEGORY BUTTONS
+function renderFilters() {
+  const buttons = [
+    `<button class="filter ${currentFilter === "all" ? "active" : ""}"
+      data-filter="all">အားလုံး</button>`
+  ];
+
+  allCategories.forEach(category => {
+    const active = currentFilter === String(category.id);
+
+    buttons.push(`
+      <button
+        class="filter ${active ? "active" : ""}"
+        data-filter="${category.id}">
+        ${escapeHTML(category.name)}
+      </button>
+    `);
+  });
+
+  filters.innerHTML = buttons.join("");
 }
 
 // LOAD PRODUCTS
@@ -51,9 +88,9 @@ async function loadProducts() {
 
   const { data, error } = await db
     .from("products")
-    .select("id,name,description,price,product_type,image_url")
+    .select("id,name,description,price,product_type,category_id,image_url")
     .eq("is_active", true)
-    .order("id");
+    .order("id", { ascending: true });
 
   if (error) {
     console.error(error);
@@ -63,8 +100,6 @@ async function loadProducts() {
 
   allProducts = data || [];
 
-  itemTotal.textContent = `ပစ္စည်း ${allProducts.length} မျိုး`;
-
   renderProducts();
 }
 
@@ -72,10 +107,18 @@ async function loadProducts() {
 function renderProducts() {
   const products = currentFilter === "all"
     ? allProducts
-    : allProducts.filter(item => item.product_type === currentFilter);
+    : allProducts.filter(item =>
+        String(item.category_id) === currentFilter
+      );
+
+  itemTotal.textContent = `ပစ္စည်း ${products.length} မျိုး`;
 
   if (!products.length) {
-    productList.textContent = "ပစ္စည်းမရှိသေးပါ။";
+    productList.innerHTML = `
+      <div class="empty-products">
+        ဒီ Category မှာ ပစ္စည်းမရှိသေးပါ။
+      </div>
+    `;
     return;
   }
 
@@ -109,17 +152,14 @@ function renderProducts() {
   }).join("");
 }
 
-// FILTER BUTTONS
+// CATEGORY FILTER
 filters.addEventListener("click", event => {
   const button = event.target.closest("[data-filter]");
   if (!button) return;
 
   currentFilter = button.dataset.filter;
 
-  filters.querySelectorAll(".filter").forEach(item => {
-    item.classList.toggle("active", item === button);
-  });
-
+  renderFilters();
   renderProducts();
 });
 
@@ -143,7 +183,6 @@ function openOrderForm(product) {
 
   orderModal.classList.add("active");
   orderModal.setAttribute("aria-hidden", "false");
-
   document.body.classList.add("modal-open");
 
   document.querySelector("#customerName").focus();
@@ -153,9 +192,7 @@ function openOrderForm(product) {
 function closeOrderForm() {
   orderModal.classList.remove("active");
   orderModal.setAttribute("aria-hidden", "true");
-
   document.body.classList.remove("modal-open");
-
   selectedProduct = null;
 }
 
@@ -166,9 +203,7 @@ document.querySelector("#cancelOrder")
   .addEventListener("click", closeOrderForm);
 
 orderModal.addEventListener("click", event => {
-  if (event.target === orderModal) {
-    closeOrderForm();
-  }
+  if (event.target === orderModal) closeOrderForm();
 });
 
 document.addEventListener("keydown", event => {
@@ -252,16 +287,12 @@ orderForm.addEventListener("submit", async event => {
       `Order အောင်မြင်ပါသည်။ Order ID: ${data.order_id}`;
 
     orderMessage.className = "order-message success";
-
     submitOrder.textContent = "အောင်မြင်ပါပြီ ✓";
 
     showToast("Order အောင်မြင်ပါပြီ။");
-
     orderForm.reset();
 
-    setTimeout(() => {
-      closeOrderForm();
-    }, 2500);
+    setTimeout(closeOrderForm, 2500);
 
   } catch (error) {
     console.error(error);
@@ -281,7 +312,6 @@ document.querySelector("#menuButton").addEventListener("click", () => {
   document.querySelector(".nav").classList.toggle("open");
 });
 
-// CLOSE MOBILE MENU
 document.querySelectorAll(".nav a").forEach(link => {
   link.addEventListener("click", () => {
     document.querySelector(".nav").classList.remove("open");
@@ -294,4 +324,12 @@ document.querySelector("#cartButton").addEventListener("click", () => {
 });
 
 // START
-loadProducts();
+async function startStore() {
+  const success = await loadCategories();
+
+  if (success) {
+    await loadProducts();
+  }
+}
+
+startStore();
