@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="my">
 <head>
@@ -12,11 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Myanmar:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
       --blue: #287cff;
@@ -42,15 +37,8 @@
       font-family: "Inter", "Noto Sans Myanmar", sans-serif;
     }
 
-    button, input, textarea, select {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    /* HEADER */
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
 
     .admin-header {
       min-height: 82px;
@@ -67,12 +55,7 @@
       z-index: 20;
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 13px;
-      min-width: 0;
-    }
+    .brand { display: flex; align-items: center; gap: 13px; min-width: 0; }
 
     .brand-icon {
       width: 53px;
@@ -92,12 +75,7 @@
       object-fit: contain;
     }
 
-    .brand h2 {
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: -.4px;
-    }
-
+    .brand h2 { font-size: 18px; font-weight: 800; letter-spacing: -.4px; }
     .brand small {
       display: block;
       margin-top: 5px;
@@ -117,13 +95,7 @@
       font-size: 13px;
       transition: .2s;
     }
-
-    #logoutBtn:hover {
-      background: #fff;
-      color: var(--blue-dark);
-    }
-
-    /* MAIN */
+    #logoutBtn:hover { background: #fff; color: var(--blue-dark); }
 
     .admin-container {
       width: 100%;
@@ -140,20 +112,8 @@
       margin-bottom: 27px;
     }
 
-    .page-heading h1 {
-      font-size: 29px;
-      font-weight: 800;
-      letter-spacing: -.7px;
-    }
-
-    .welcome-text {
-      color: var(--muted);
-      margin-top: 9px;
-      font-size: 13px;
-      line-height: 1.8;
-    }
-
-    /* STATS */
+    .page-heading h1 { font-size: 29px; font-weight: 800; letter-spacing: -.7px; }
+    .welcome-text { color: var(--muted); margin-top: 9px; font-size: 13px; line-height: 1.8; }
 
     .admin-stats {
       display: grid;
@@ -184,27 +144,9 @@
       background: rgba(255,255,255,.12);
     }
 
-    .admin-card h3 {
-      font-size: 13px;
-      font-weight: 600;
-      opacity: .9;
-    }
-
-    .admin-card p {
-      margin-top: 16px;
-      font-size: 39px;
-      font-weight: 800;
-    }
-
-    .stat-icon {
-      position: absolute;
-      right: 25px;
-      bottom: 23px;
-      font-size: 37px;
-      opacity: .8;
-    }
-
-    /* PRODUCT MANAGEMENT */
+    .admin-card h3 { font-size: 13px; font-weight: 600; opacity: .9; }
+    .admin-card p { margin-top: 16px; font-size: 39px; font-weight: 800; }
+    .stat-icon { position: absolute; right: 25px; bottom: 23px; font-size: 37px; opacity: .8; }
 
     .admin-products {
       padding: 26px;
@@ -223,20 +165,10 @@
       margin-bottom: 24px;
     }
 
-    .admin-title h2 {
-      font-size: 20px;
-      font-weight: 800;
-    }
+    .admin-title h2 { font-size: 20px; font-weight: 800; }
+    .admin-title p { margin-top: 7px; color: var(--muted); font-size: 12px; line-height: 1.7; }
 
-    .admin-title p {
-      margin-top: 7px;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.7;
-    }
-
-    #addProductBtn,
-    #saveProductBtn {
+    #addProductBtn, #saveProductBtn {
       border: none;
       padding: 13px 19px;
       border-radius: 11px;
@@ -248,13 +180,10 @@
       transition: .2s;
     }
 
-    #addProductBtn:hover,
-    #saveProductBtn:hover {
+    #addProductBtn:hover, #saveProductBtn:hover {
       transform: translateY(-2px);
       box-shadow: 0 10px 25px rgba(40,124,255,.35);
     }
-
-    /* PRODUCT FORM */
 
     #productForm {
       background: rgba(255,255,255,.035);
@@ -264,15 +193,9 @@
       margin-bottom: 26px;
     }
 
-    #productForm h3 {
-      margin-bottom: 20px;
-      font-size: 18px;
-    }
+    #productForm h3 { margin-bottom: 20px; font-size: 18px; }
 
-    #saveProductForm {
-      display: grid;
-      gap: 14px;
-    }
+    #saveProductForm { display: grid; gap: 14px; }
 
     #saveProductForm input:not([type="checkbox"]):not([type="file"]),
     #saveProductForm textarea,
@@ -289,9 +212,7 @@
     }
 
     #saveProductForm input::placeholder,
-    #saveProductForm textarea::placeholder {
-      color: #7184a5;
-    }
+    #saveProductForm textarea::placeholder { color: #7184a5; }
 
     #saveProductForm input:focus,
     #saveProductForm textarea:focus,
@@ -300,15 +221,8 @@
       box-shadow: 0 0 0 3px rgba(40,124,255,.12);
     }
 
-    #saveProductForm select option {
-      background: #0d1a34;
-      color: white;
-    }
-
-    #saveProductForm textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
+    #saveProductForm select option { background: #0d1a34; color: white; }
+    #saveProductForm textarea { min-height: 100px; resize: vertical; }
 
     #productImageFile {
       width: 100%;
@@ -320,17 +234,8 @@
       font-size: 12px;
     }
 
-    .image-help {
-      color: var(--muted);
-      font-size: 11px;
-      margin-top: -5px;
-      line-height: 1.8;
-    }
-
-    .image-preview-box {
-      display: none;
-      margin-top: 5px;
-    }
+    .image-help { color: var(--muted); font-size: 11px; margin-top: -5px; line-height: 1.8; }
+    .image-preview-box { display: none; margin-top: 5px; }
 
     #imagePreview {
       display: block;
@@ -343,24 +248,9 @@
       padding: 6px;
     }
 
-    #saveProductForm label {
-      font-size: 13px;
-      font-weight: 600;
-      color: #dce6f8;
-    }
-
-    #productActive {
-      accent-color: var(--blue);
-      width: 16px;
-      height: 16px;
-      vertical-align: middle;
-    }
-
-    .form-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
+    #saveProductForm label { font-size: 13px; font-weight: 600; color: #dce6f8; }
+    #productActive { accent-color: var(--blue); width: 16px; height: 16px; vertical-align: middle; }
+    .form-actions { display: flex; gap: 10px; flex-wrap: wrap; }
 
     #cancelProductBtn {
       padding: 12px 18px;
@@ -371,24 +261,10 @@
       font-weight: 700;
       font-size: 13px;
     }
+    #cancelProductBtn:hover { background: rgba(255,255,255,.13); }
 
-    #cancelProductBtn:hover {
-      background: rgba(255,255,255,.13);
-    }
-
-    #formMessage {
-      margin: 0;
-      font-size: 13px;
-      color: var(--cyan);
-      line-height: 1.7;
-    }
-
-    /* PRODUCT LIST */
-
-    #adminProductList {
-      display: grid;
-      gap: 12px;
-    }
+    #formMessage { margin: 0; font-size: 13px; color: var(--cyan); line-height: 1.7; }
+    #adminProductList { display: grid; gap: 12px; }
 
     .admin-product-row {
       display: grid;
@@ -408,26 +284,11 @@
       transform: translateY(-1px);
     }
 
-    .admin-product-row h3 {
-      margin: 0;
-      color: #f3f7ff;
-      font-size: 14px;
-    }
+    .admin-product-row h3 { margin: 0; color: #f3f7ff; font-size: 14px; }
+    .admin-product-row p { color: var(--muted); margin: 7px 0; font-size: 12px; line-height: 1.7; }
+    .product-actions { display: flex; gap: 7px; }
 
-    .admin-product-row p {
-      color: var(--muted);
-      margin: 7px 0;
-      font-size: 12px;
-      line-height: 1.7;
-    }
-
-    .product-actions {
-      display: flex;
-      gap: 7px;
-    }
-
-    .edit-btn,
-    .delete-btn {
+    .edit-btn, .delete-btn {
       border: none;
       padding: 9px 12px;
       border-radius: 8px;
@@ -436,23 +297,10 @@
       transition: .2s;
     }
 
-    .edit-btn {
-      background: rgba(40,124,255,.15);
-      color: #68a4ff;
-    }
-
-    .edit-btn:hover {
-      background: rgba(40,124,255,.28);
-    }
-
-    .delete-btn {
-      background: rgba(255,100,110,.12);
-      color: #ff777f;
-    }
-
-    .delete-btn:hover {
-      background: rgba(255,100,110,.25);
-    }
+    .edit-btn { background: rgba(40,124,255,.15); color: #68a4ff; }
+    .edit-btn:hover { background: rgba(40,124,255,.28); }
+    .delete-btn { background: rgba(255,100,110,.12); color: #ff777f; }
+    .delete-btn:hover { background: rgba(255,100,110,.25); }
 
     .active-status {
       color: #36e0a5;
@@ -474,92 +322,148 @@
       white-space: nowrap;
     }
 
-    /* GENERAL INPUTS FOR DYNAMIC CATEGORY UI */
+    /* CATEGORY MANAGER - readable white panel inside dark dashboard.
+       dashboard.js injects this block dynamically; IDs below are preserved. */
 
-    input, select, textarea {
-      color-scheme: dark;
+    #categoryManager {
+      background: #ffffff !important;
+      color: #172b4d !important;
+      padding: 20px !important;
+      margin: 20px 0 !important;
+      border-radius: 16px !important;
+      border: 1px solid #e2e8f0 !important;
+      box-shadow: 0 10px 28px rgba(0,0,0,.13) !important;
     }
 
-    /* MOBILE */
+    #categoryManager h2,
+    #categoryManager h3,
+    #categoryManager h4,
+    #categoryManager strong,
+    #categoryManager label,
+    #categoryManager p,
+    #categoryManager span {
+      color: #172b4d !important;
+    }
+
+    #categoryManager h3 {
+      color: #1769e8 !important;
+      font-weight: 800 !important;
+    }
+
+    #categoryManager input,
+    #categoryManager select {
+      background: #ffffff !important;
+      color: #172b4d !important;
+      border: 1px solid #d5deeb !important;
+      border-radius: 9px !important;
+      padding: 12px !important;
+      outline: none;
+    }
+
+    #categoryManager input::placeholder { color: #8793a5 !important; }
+
+    #categoryManager input:focus,
+    #categoryManager select:focus {
+      border-color: #287cff !important;
+      box-shadow: 0 0 0 3px rgba(40,124,255,.12) !important;
+    }
+
+    #categoryManager #newCategoryName {
+      min-width: 180px;
+      flex: 1;
+    }
+
+    #categoryManager #addCategoryBtn {
+      background: linear-gradient(135deg,#287cff,#0870ed) !important;
+      color: #ffffff !important;
+      border: 0 !important;
+      border-radius: 9px !important;
+      padding: 12px 17px !important;
+      font-weight: 700 !important;
+    }
+
+    #categoryManager #categoryMessage {
+      color: #1769e8 !important;
+      font-size: 13px !important;
+      line-height: 1.7;
+    }
+
+    #categoryManager #categoryList {
+      color: #172b4d !important;
+    }
+
+    #categoryManager #categoryList > div {
+      background: #f8faff !important;
+      border: 1px solid #e2e8f0 !important;
+      border-radius: 10px !important;
+      margin-bottom: 9px;
+    }
+
+    #categoryManager #categoryList strong {
+      color: #172b4d !important;
+      font-size: 14px !important;
+      font-weight: 700 !important;
+    }
+
+    #categoryManager #categoryList button {
+      border-radius: 8px !important;
+      padding: 8px 11px !important;
+      font-size: 12px !important;
+      font-weight: 700 !important;
+    }
+
+    #categoryManager #categoryList button[data-action="up"],
+    #categoryManager #categoryList button[data-action="down"] {
+      background: #e8f1ff !important;
+      color: #1769e8 !important;
+      border: 1px solid #d5e5ff !important;
+    }
+
+    #categoryManager #categoryList button[data-action="edit"] {
+      background: #e8f1ff !important;
+      color: #1769e8 !important;
+      border: 1px solid #d5e5ff !important;
+    }
+
+    #categoryManager #categoryList button[data-action="delete"] {
+      background: #fff0f0 !important;
+      color: #dc2626 !important;
+      border: 1px solid #ffdada !important;
+    }
+
+    #categoryManager #categoryList button:hover { filter: brightness(.97); }
+
+    /* Dynamic product category dropdown */
+    #productCategory {
+      background: #0d1a34 !important;
+      color: #ffffff !important;
+      border: 1px solid rgba(255,255,255,.15) !important;
+    }
 
     @media (max-width: 700px) {
-      .admin-header {
-        padding: 12px 15px;
-        min-height: 72px;
-      }
-
-      .brand-icon {
-        width: 45px;
-        height: 45px;
-        border-radius: 12px;
-      }
-
-      .brand h2 {
-        font-size: 14px;
-      }
-
-      .brand small {
-        font-size: 9px;
-      }
-
-      #logoutBtn {
-        padding: 10px 12px;
-        font-size: 11px;
-      }
-
-      .admin-container {
-        margin: 25px auto;
-        padding: 0 13px 35px;
-      }
-
-      .page-heading h1 {
-        font-size: 24px;
-      }
-
-      .admin-products {
-        padding: 17px;
-      }
-
-      .admin-title {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      #addProductBtn {
-        width: 100%;
-      }
-
-      .admin-product-row {
-        grid-template-columns: 1fr auto;
-        gap: 10px;
-      }
-
-      .product-actions {
-        grid-column: 1 / -1;
-      }
-
+      .admin-header { padding: 12px 15px; min-height: 72px; }
+      .brand-icon { width: 45px; height: 45px; border-radius: 12px; }
+      .brand h2 { font-size: 14px; }
+      .brand small { font-size: 9px; }
+      #logoutBtn { padding: 10px 12px; font-size: 11px; }
+      .admin-container { margin: 25px auto; padding: 0 13px 35px; }
+      .page-heading h1 { font-size: 24px; }
+      .admin-products { padding: 17px; }
+      .admin-title { align-items: flex-start; flex-direction: column; }
+      #addProductBtn { width: 100%; }
+      .admin-product-row { grid-template-columns: 1fr auto; gap: 10px; }
+      .product-actions { grid-column: 1 / -1; }
       .admin-product-row .active-status,
-      .admin-product-row .inactive-status {
-        justify-self: end;
-      }
+      .admin-product-row .inactive-status { justify-self: end; }
     }
 
     @media (max-width: 420px) {
-      .admin-card p {
-        font-size: 32px;
-      }
-
-      #productForm {
-        padding: 15px;
-      }
-
-      .form-actions button {
-        flex: 1;
-      }
-
-      .admin-product-row {
-        padding: 13px;
-      }
+      .admin-card p { font-size: 32px; }
+      #productForm { padding: 15px; }
+      .form-actions button { flex: 1; }
+      .admin-product-row { padding: 13px; }
+      #categoryManager { padding: 15px !important; }
+      #categoryManager #categoryList > div { gap: 7px !important; }
     }
   </style>
 </head>
@@ -569,15 +473,13 @@
   <header class="admin-header">
     <div class="brand">
       <div class="brand-icon">
-        <img src="k7-logo.png" alt="K7 Logo">
+        <img src="k7-logo.png" alt="K7 Digital Store Logo">
       </div>
-
       <div>
         <h2>K7 Digital Store</h2>
         <small>ADMIN DASHBOARD</small>
       </div>
     </div>
-
     <button id="logoutBtn">Logout ↗</button>
   </header>
 
@@ -586,9 +488,7 @@
     <div class="page-heading">
       <div>
         <h1>Dashboard</h1>
-        <p class="welcome-text">
-          Welcome back! Manage your digital products.
-        </p>
+        <p class="welcome-text">Welcome back! Manage your digital products.</p>
       </div>
     </div>
 
@@ -607,7 +507,6 @@
           <h2>Product Management</h2>
           <p>Add, edit and manage your store products.</p>
         </div>
-
         <button id="addProductBtn">＋ Add Product</button>
       </div>
 
@@ -616,7 +515,6 @@
         <h3 id="formTitle">Add New Product</h3>
 
         <form id="saveProductForm">
-
           <input type="hidden" id="editProductId">
 
           <input
@@ -674,26 +572,17 @@
           </label>
 
           <div class="form-actions">
-            <button type="submit" id="saveProductBtn">
-              Save Product
-            </button>
-
-            <button type="button" id="cancelProductBtn">
-              Cancel
-            </button>
+            <button type="submit" id="saveProductBtn">Save Product</button>
+            <button type="button" id="cancelProductBtn">Cancel</button>
           </div>
 
           <p id="formMessage" role="status"></p>
-
         </form>
       </div>
 
-      <div id="adminProductList">
-        Loading products...
-      </div>
+      <div id="adminProductList">Loading products...</div>
 
     </section>
-
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
