@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="my">
 <head>
@@ -10,6 +11,15 @@
 
   <!-- Modern Telegram Button Style -->
   <style>
+    /* LOGO SIZE FIX */
+    .brand-mark img,
+    .footer-brand img {
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+      display: block;
+    }
+
     /* =========================
        MODERN TELEGRAM BUTTONS
     ========================= */
@@ -146,13 +156,12 @@
 
   <header class="topbar">
 
-<a class="brand" href="#">
-  <span class="brand-mark">
-    <img src="k7-logo.png" alt="K7 Digital Store">
-  </span>
-  <span>K7 Digital Store</span>
-</a>
-
+    <a class="brand" href="#">
+      <span class="brand-mark">
+        <img src="k7-logo.png" alt="K7 Digital Store">
+      </span>
+      <span>K7 Digital Store</span>
+    </a>
 
     <nav class="nav">
       <a class="active" href="#home">Home</a>
@@ -170,17 +179,12 @@
 
   </header>
 
-
   <main>
 
-    <!-- =========================
-         HERO
-    ========================== -->
-
+    <!-- HERO -->
     <section class="hero" id="home">
 
       <div>
-
         <p class="eyebrow">
           FAST • EASY • SECURE
         </p>
@@ -199,61 +203,33 @@
           ပစ္စည်းများ ကြည့်ရန်
           <span>→</span>
         </a>
-
       </div>
 
-
       <div class="hero-art" aria-hidden="true">
-
         <div class="orbit orbit-one"></div>
         <div class="orbit orbit-two"></div>
-
-        <div class="controller">
-          🎮
-        </div>
-
-        <div class="spark spark-one">
-          ✦
-        </div>
-
-        <div class="spark spark-two">
-          ✧
-        </div>
-
+        <div class="controller">🎮</div>
+        <div class="spark spark-one">✦</div>
+        <div class="spark spark-two">✧</div>
       </div>
 
     </section>
 
-
-    <!-- =========================
-         PRODUCTS
-    ========================== -->
-
+    <!-- PRODUCTS -->
     <section class="section" id="products">
 
       <div class="section-heading">
-
         <div>
-
-          <p class="eyebrow">
-            OUR STORE
-          </p>
-
-          <h2>
-            ပစ္စည်းများ
-          </h2>
-
+          <p class="eyebrow">OUR STORE</p>
+          <h2>ပစ္စည်းများ</h2>
         </div>
 
         <span class="item-total" id="itemTotal">
           ပစ္စည်းများ
         </span>
-
       </div>
 
-
       <div class="filters" id="filters">
-
         <button class="filter active" data-filter="all">
           အားလုံး
         </button>
@@ -265,39 +241,24 @@
         <button class="filter" data-filter="digital">
           Digital Service
         </button>
-
       </div>
-
 
       <div class="product-list" id="productList"></div>
 
     </section>
 
-
-    <!-- =========================
-         CONTACT
-    ========================== -->
-
+    <!-- CONTACT -->
     <section class="contact" id="contact">
 
       <div>
+        <p class="eyebrow">NEED HELP?</p>
 
-        <p class="eyebrow">
-          NEED HELP?
-        </p>
-
-        <h2>
-          အကူအညီလိုပါသလား။
-        </h2>
+        <h2>အကူအညီလိုပါသလား။</h2>
 
         <p>
           ဝယ်ယူလိုပါက Telegram မှတစ်ဆင့် ဆက်သွယ်နိုင်ပါတယ်။
         </p>
-
       </div>
-
-
-      <!-- Modern Telegram Buttons -->
 
       <div class="telegram-actions">
 
@@ -308,32 +269,19 @@
           target="_blank"
           rel="noopener"
         >
-          <span class="telegram-icon">
-            ✈️
-          </span>
-
-          <span>
-            Contact Me
-          </span>
+          <span class="telegram-icon">✈️</span>
+          <span>Contact Me</span>
         </a>
 
-
         <!-- Join Telegram Group -->
-        <!-- YourGroupLink နေရာမှာ သင့် Group Link ထည့်ပါ -->
-
         <a
           class="telegram-button group-button"
           href="https://t.me/+hwj3y-ZcWeEwODFh"
           target="_blank"
           rel="noopener"
         >
-          <span class="telegram-icon">
-            👥
-          </span>
-
-          <span>
-            Join Telegram Group
-          </span>
+          <span class="telegram-icon">👥</span>
+          <span>Join Telegram Group</span>
         </a>
 
       </div>
@@ -342,22 +290,12 @@
 
   </main>
 
-
-  <!-- =========================
-       FOOTER
-  ========================== -->
-
+  <!-- FOOTER -->
   <footer>
 
-<a class="brand footer-brand" href="#">
-  <img src="k7-logo.png" alt="K7 Digital Store">
-  <span>K7 Digital Store</span>
-</a>
-
-      <span>
-        K7 Digital Store
-      </span>
-
+    <a class="brand footer-brand" href="#">
+      <img src="k7-logo.png" alt="K7 Digital Store">
+      <span>K7 Digital Store</span>
     </a>
 
     <span>
@@ -366,11 +304,7 @@
 
   </footer>
 
-
-  <!-- =========================
-       ORDER MODAL
-  ========================== -->
-
+  <!-- ORDER MODAL -->
   <div
     class="modal-overlay"
     id="orderModal"
@@ -393,7 +327,6 @@
         ×
       </button>
 
-
       <p class="eyebrow">
         K7 DIGITAL STORE ORDER
       </p>
@@ -406,11 +339,8 @@
         အောက်ပါအချက်အလက်များကို ဖြည့်သွင်းပေးပါ။
       </p>
 
-
       <div class="selected-product">
-
         <div>
-
           <span class="selected-label">
             ရွေးချယ်ထားသောပစ္စည်း
           </span>
@@ -418,15 +348,12 @@
           <strong id="selectedProductName">
             Product
           </strong>
-
         </div>
 
         <strong id="selectedProductPrice">
           Ks0
         </strong>
-
       </div>
-
 
       <form id="orderForm">
 
@@ -443,7 +370,6 @@
           required
         >
 
-
         <label for="customerPhone">
           ဖုန်းနံပါတ်
         </label>
@@ -456,7 +382,6 @@
           maxlength="40"
           required
         >
-
 
         <label for="playerId">
           Player ID / Account ID
@@ -471,12 +396,10 @@
           required
         >
 
-
         <p class="form-note">
           Order တင်ပြီးပါက Telegram မှတဆင့်ပြန်လည်ဆက်သွယ်ပေးပါ။
           အချက်အလက်များကို စစ်ဆေးပေးပါမည်။
         </p>
-
 
         <button
           class="submit-order"
@@ -486,7 +409,6 @@
           Order တင်မည်
         </button>
 
-
         <button
           class="cancel-order"
           id="cancelOrder"
@@ -494,7 +416,6 @@
         >
           ပြန်သွားမည်
         </button>
-
 
         <p
           class="order-message"
@@ -508,25 +429,16 @@
 
   </div>
 
-
-  <!-- =========================
-       TOAST
-  ========================== -->
-
+  <!-- TOAST -->
   <div
     class="toast"
     id="toast"
     role="status"
   ></div>
 
-
-  <!-- =========================
-       SCRIPTS
-  ========================== -->
-
+  <!-- SCRIPTS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <script src="script.js"></script>
 
 </body>
-</html> 
+</html>
